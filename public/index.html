@@ -1062,8 +1062,7 @@ async function startPipeline() {
   const client = document.getElementById('client-input').value.trim();
 
   isRunning = true;
-  document.getElementById('run-btn').disabled = true;
-  document.getElementById('run-btn').textContent = 'Launching…';
+  setRunLoading(true);
   AGENT_ORDER.forEach(id => agentStates[id] = 'idle');
 
   connectSSE(brief, client);
