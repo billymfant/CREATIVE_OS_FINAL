@@ -75,79 +75,133 @@ body {
 /* ── SCREEN 1: BRIEF ── */
 #s-brief {
   align-items: center; justify-content: center;
-  background: transparent;
-  padding-top: 52px;
+  background: var(--color-bg);
+  background-image: radial-gradient(
+    ellipse 55% 45% at 72% 18%,
+    rgba(129,140,248,0.07) 0%, transparent 65%
+  );
+}
+
+.hero-text {
+  font-family: var(--font-display);
+  font-size: 52px; font-weight: 800;
+  letter-spacing: -0.05em; line-height: 1.0;
+  text-align: center; color: var(--color-text);
+  margin-bottom: 12px;
+}
+.hero-text em { color: var(--color-primary); font-style: normal; }
+.hero-sub {
+  font-size: 9px; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--color-text-muted); margin-bottom: 32px; text-align: center;
+}
+.brief-zone {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 52px var(--spacing-container-x) 36px;
+  margin-top: 48px;
 }
 
 /* Centered brief card */
 .brief-card {
-  position: relative; z-index: 5;
-  width: min(560px, 92vw);
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(99, 102, 241, 0.16);
-  border-top: 3px solid var(--color-primary);
-  border-radius: var(--radius-xl);
-  box-shadow: 0 24px 64px rgba(99, 102, 241, 0.10), 0 4px 20px rgba(0,0,0,0.05);
-  padding: 28px;
-  display: flex; flex-direction: column;
-}
-.brief-card-header { margin-bottom: 18px; }
-.brief-card-kicker {
-  font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
-  color: var(--color-primary); font-weight: 600; margin-bottom: 6px;
-}
-.brief-card-title {
-  font-family: var(--font-display); font-size: 22px; font-weight: 800;
-  letter-spacing: -0.03em; color: var(--color-text); line-height: 1.15;
-}
-.brief-card-title em {
-  background: var(--gradient-text);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  background-clip: text; font-style: normal;
-}
-.brief-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-#brief-input {
-  width: 100%; min-height: 120px; max-height: 200px;
-  background: rgba(255,255,255,0.70);
+  width: min(580px, 100%);
+  background: var(--brief-card-bg);
   border: 1px solid var(--brief-card-border);
-  border-radius: var(--radius-lg); outline: none; resize: none;
-  color: var(--color-text); font-family: var(--font-ui); font-size: 14px;
-  padding: 16px 18px; line-height: 1.7;
-  transition: border-color 150ms, box-shadow 150ms;
+  border-radius: var(--radius-lg); overflow: hidden;
+  transition: border-color var(--duration-fast) ease-in-out;
 }
-#brief-input:focus {
+.brief-card:focus-within {
   border-color: var(--brief-card-border-focus);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.08);
+  box-shadow: 0 0 0 var(--ring-offset) var(--color-bg),
+              0 0 0 calc(var(--ring-offset) + 2px) var(--ring-color);
+}
+.brief-card.error {
+  border-color: var(--brief-card-border-error);
+  box-shadow: 0 0 0 var(--ring-offset) var(--color-bg),
+              0 0 0 calc(var(--ring-offset) + 2px) rgba(248,113,113,0.15);
+}
+.brief-toprow {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px var(--spacing-card-pad) 9px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.brief-lbl {
+  font-size: 8px; letter-spacing: 2.5px; text-transform: uppercase;
+  color: rgba(129,140,248,0.5);
+}
+#char-count { font-size: 8px; color: var(--color-text-subtle); }
+#brief-input {
+  width: 100%; height: 90px; background: transparent;
+  border: none; outline: none;
+  color: var(--color-text); font-family: var(--font-ui);
+  font-size: 11px; padding: 14px var(--spacing-card-pad);
+  resize: none; line-height: 1.7;
 }
 #brief-input::placeholder { color: var(--color-text-subtle); font-style: italic; }
-.brief-field-footer { display: flex; justify-content: flex-end; }
-#char-count { font-size: 11px; color: var(--color-text-subtle); }
-.brief-meta-row { display: flex; align-items: center; gap: 8px; }
+.brief-error-msg {
+  padding: 6px var(--spacing-card-pad) 8px;
+  font-size: 8px; color: var(--color-error);
+  background: var(--color-error-bg);
+  border-top: 1px solid rgba(248,113,113,0.10);
+  display: none; letter-spacing: 0.5px;
+}
+.brief-card.error .brief-error-msg { display: block; }
+.brief-bottom {
+  display: flex; gap: 10px; align-items: center;
+  padding: 10px var(--spacing-card-pad);
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
 #client-input {
   flex: 1;
-  background: var(--client-field-bg);
-  border: 1px solid var(--client-field-border); border-radius: var(--radius-md);
-  padding: 9px 12px; color: var(--color-text-muted);
-  font-family: var(--font-ui); font-size: 11px; outline: none;
-  transition: border-color 150ms, background 150ms;
+  background: var(--field-bg);
+  border: 1px solid var(--field-border);
+  border-radius: var(--radius-md);
+  padding: 8px 12px;
+  color: var(--color-text-muted);
+  font-family: var(--font-ui); font-size: 10px;
+  outline: none;
+  transition: background var(--duration-fast) ease-in-out,
+              border-color var(--duration-fast) ease-in-out;
 }
-#client-input:hover { background: var(--client-field-bg-hover); border-color: var(--client-field-border-hover); }
-#client-input:focus { background: var(--client-field-bg-hover); border-color: var(--client-field-border-focus); color: var(--color-text); }
+#client-input:hover {
+  background: var(--field-bg-hover);
+  border-color: var(--field-border-hover);
+}
+#client-input:focus {
+  background: var(--field-bg-hover);
+  border-color: var(--field-border-focus);
+}
 #client-input::placeholder { color: var(--color-text-subtle); }
+
 #run-btn {
-  width: 100%; margin-top: 16px;
-  padding: 14px 24px; background: var(--gradient-brand); color: var(--btn-text);
+  padding: 9px 20px;
+  background: var(--btn-bg);
+  color: var(--btn-color);
   border: none; border-radius: var(--radius-md); cursor: pointer;
-  font-family: var(--font-ui); font-size: 12px; font-weight: 700;
-  letter-spacing: 0.18em; text-transform: uppercase;
-  transition: opacity 150ms ease-in-out, transform 150ms ease-out, box-shadow 150ms;
-  display: flex; align-items: center; justify-content: center; gap: 8px;
-  box-shadow: var(--glow-primary);
+  font-family: var(--font-ui); font-weight: 500;
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  white-space: nowrap;
+  transition: background var(--duration-fast) ease-in-out,
+              transform var(--duration-normal) ease-out;
+  display: flex; align-items: center; gap: 8px;
 }
-#run-btn:hover:not(:disabled) { opacity: 0.9; box-shadow: var(--glow-primary-hover); }
-#run-btn:active:not(:disabled) { opacity: 0.85; transform: scale(0.98); }
-#run-btn:disabled { background: var(--btn-bg-disabled); color: var(--btn-text-disabled); cursor: not-allowed; box-shadow: none; opacity: 1; }
+#run-btn:hover:not(:disabled) { background: var(--btn-bg-hover); }
+#run-btn:active:not(:disabled) {
+  background: var(--btn-bg-active);
+  transform: scale(0.98);
+}
+#run-btn:disabled {
+  background: var(--btn-bg-disabled);
+  color: var(--btn-color-disabled);
+  cursor: not-allowed;
+}
+.btn-spinner {
+  width: 10px; height: 10px;
+  border: 1.5px solid rgba(6,6,15,0.3);
+  border-top-color: var(--color-on-primary);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+#run-btn.loading .btn-spinner { display: block; }
 
 /* ── ESTIMATE PANEL ── */
 .estimate-panel {
@@ -708,72 +762,68 @@ body {
     </div>
   </nav>
 
-  <!-- Centered brief card — particles render behind this -->
-  <div class="brief-card">
+  <!-- Brief zone: hero text + card -->
+  <div class="brief-zone">
+    <div class="hero-text">Build what<br>doesn't <em>exist</em> yet.</div>
+    <div class="hero-sub">7 independent agents · one creative vision · zero compromise</div>
 
-    <div class="brief-card-header">
-      <div class="brief-card-kicker">AI Creative Pipeline</div>
-      <h2 class="brief-card-title">What are you <em>creating?</em></h2>
-    </div>
-
-    <div class="brief-field">
+    <div class="brief-card">
+      <div class="brief-toprow">
+        <span class="brief-lbl">Brief</span>
+        <span id="char-count">0 / 800</span>
+      </div>
       <textarea id="brief-input" maxlength="800"
         aria-label="Creative brief — describe your project"
         placeholder="Describe your campaign, product launch, brand story, or creative vision…"></textarea>
-      <div class="brief-field-footer">
-        <span id="char-count">0 / 800</span>
-      </div>
-    </div>
+      <div class="brief-error-msg">Brief must be at least 20 characters</div>
 
-    <div class="brief-meta-row">
-      <input id="client-input" aria-label="Client or brand name (optional)" placeholder="Client / brand (optional)"/>
-      <button class="style-pick-btn" id="style-pick-btn" onclick="openStylePicker()">+ Style</button>
-      <div class="style-chip" id="style-chip">
-        <div class="style-chip-colors" id="style-chip-colors"></div>
-        <span id="style-chip-name"></span>
-        <span class="style-chip-remove" onclick="clearStyle()">×</span>
-      </div>
-    </div>
-
-    <div class="estimate-panel" id="estimate-panel">
-      <div class="est-loading" id="est-loading">
-        <div class="est-spinner"></div>
-        Estimating project complexity…
-      </div>
-      <div id="est-content" style="display:none;">
-        <div class="est-grid">
-          <div class="est-cell">
-            <div class="est-cell-label">Complexity</div>
-            <div class="est-cell-value" id="est-complexity">—</div>
+      <div class="estimate-panel" id="estimate-panel">
+        <div class="est-loading" id="est-loading">
+          <div class="est-spinner"></div>
+          Estimating project complexity…
+        </div>
+        <div id="est-content" style="display:none;">
+          <div class="est-grid">
+            <div class="est-cell">
+              <div class="est-cell-label">Complexity</div>
+              <div class="est-cell-value" id="est-complexity">—</div>
+            </div>
+            <div class="est-cell">
+              <div class="est-cell-label">Est. Cost</div>
+              <div class="est-cell-value green" id="est-cost">—</div>
+            </div>
+            <div class="est-cell">
+              <div class="est-cell-label">Est. Time</div>
+              <div class="est-cell-value yellow" id="est-time">—</div>
+            </div>
+            <div class="est-cell">
+              <div class="est-cell-label">Tokens</div>
+              <div class="est-cell-value" id="est-tokens">—</div>
+            </div>
           </div>
-          <div class="est-cell">
-            <div class="est-cell-label">Est. Cost</div>
-            <div class="est-cell-value green" id="est-cost">—</div>
-          </div>
-          <div class="est-cell">
-            <div class="est-cell-label">Est. Time</div>
-            <div class="est-cell-value yellow" id="est-time">—</div>
-          </div>
-          <div class="est-cell">
-            <div class="est-cell-label">Tokens</div>
-            <div class="est-cell-value" id="est-tokens">—</div>
+          <div class="est-bottom">
+            <span class="est-badge" id="est-badge">—</span>
+            <span class="est-reason" id="est-reason">—</span>
           </div>
         </div>
-        <div class="est-bottom">
-          <span class="est-badge" id="est-badge">—</span>
-          <span class="est-reason" id="est-reason">—</span>
-        </div>
       </div>
-    </div>
 
-    <button id="run-btn" aria-label="Configure and run the pipeline" onclick="goToConfig()">
-      Configure Pipeline
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
+      <div class="brief-bottom">
+        <input id="client-input" aria-label="Client or brand name (optional)" placeholder="Client / brand (optional)"/>
+        <button class="style-pick-btn" id="style-pick-btn" onclick="openStylePicker()">+ Style</button>
+        <div class="style-chip" id="style-chip">
+          <div class="style-chip-colors" id="style-chip-colors"></div>
+          <span id="style-chip-name"></span>
+          <span class="style-chip-remove" onclick="clearStyle()">×</span>
+        </div>
+        <button id="run-btn" aria-label="Configure and run the pipeline" onclick="goToConfig()" disabled>
+          <div class="btn-spinner"></div>
+          <span id="run-btn-label">Configure Pipeline →</span>
+        </button>
+      </div>
+    </div><!-- /brief-card -->
 
-  </div><!-- /brief-card -->
+  </div><!-- /brief-zone -->
 </div><!-- /s-brief -->
 
 <!-- ════════════════ STYLE PICKER MODAL ════════════════ -->
@@ -972,9 +1022,28 @@ function showScreen(id) {
 function goToBrief() {
   isRunning = false;
   AGENT_ORDER.forEach(id => agentStates[id] = 'idle');
-  document.getElementById('run-btn').disabled = false;
-  document.getElementById('run-btn').textContent = 'Configure Pipeline →';
+  setRunLoading(false);
+  validateBrief();
   showScreen('s-brief');
+}
+
+function setRunLoading(loading) {
+  const btn = document.getElementById('run-btn');
+  const lbl = document.getElementById('run-btn-label');
+  if (!btn || !lbl) return;
+  btn.disabled = loading;
+  btn.classList.toggle('loading', loading);
+  lbl.textContent = loading ? 'Running…' : 'Configure Pipeline →';
+}
+
+function validateBrief() {
+  const val = document.getElementById('brief-input').value.trim();
+  const btn = document.getElementById('run-btn');
+  const card = document.querySelector('.brief-card');
+  if (!btn || !card) return;
+  const ok = val.length >= 20;
+  btn.disabled = !ok;
+  card.classList.toggle('error', val.length > 0 && !ok);
 }
 
 // ─────────────────────────────────────────────────────────
@@ -1853,6 +1922,11 @@ function getStyleContext() {
 // ─────────────────────────────────────────────────────────
 // INIT
 // ─────────────────────────────────────────────────────────
+document.getElementById('brief-input').addEventListener('input', function () {
+  validateBrief();
+  const cc = document.getElementById('char-count');
+  if (cc) cc.textContent = this.value.length + ' / 800';
+});
 showScreen('s-brief');
 loadStyles();
 </script>
