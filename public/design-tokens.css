@@ -1,193 +1,178 @@
 /* ============================================================
-   CreativeOS Design Tokens — Light Glass Edition
+   design-tokens.css  —  CreativeOS Design System
    Source of truth: DESIGN.md
-   Style: Glassmorphism · Off-white · Gaussian ambient
-   Typography: Plus Jakarta Sans (friendly SaaS — ui-ux-pro-max #1 pick)
-   Three-layer architecture: Primitive → Semantic → Component
+   Three-layer: PRIMITIVES → SEMANTIC → COMPONENTS
    ============================================================ */
 
-/* ── LAYER 1: PRIMITIVES ── */
+/* === LAYER 1: PRIMITIVES === */
 :root {
-  /* Indigo / brand scale (keeps iris DNA) */
-  --indigo-50:  #EEF2FF;
-  --indigo-100: #E0E7FF;
-  --indigo-200: #C7D2FE;
-  --indigo-300: #A5B4FC;
-  --indigo-400: #818CF8;
-  --indigo-500: #6366F1;
-  --indigo-600: #4F46E5;
-  --indigo-700: #4338CA;
+  /* Iris scale */
+  --iris-300: #c7d2fe;
+  --iris-400: #a5b4fc;
+  --iris-500: #818cf8;
+  --iris-600: #6366f1;
+  --iris-700: #4f46e5;
 
-  /* Parchment / off-white base */
-  --parchment-50:  #FAFBFF;
-  --parchment-100: #F5F3FF;
-  --parchment-200: #EDE9FF;
+  /* Obsidian scale */
+  --obsidian-1000: #060608;
+  --obsidian-900:  #0a0a10;
+  --obsidian-800:  #0f1020;
+  --obsidian-700:  #1e2035;
+  --obsidian-600:  #2a2b45;
+  --obsidian-500:  #3a3a55;
 
-  /* Slate neutrals */
-  --slate-50:  #F8FAFC;
-  --slate-100: #F1F5F9;
-  --slate-200: #E2E8F0;
-  --slate-300: #CBD5E1;
-  --slate-400: #94A3B8;
-  --slate-500: #64748B;
-  --slate-600: #475569;
-  --slate-700: #334155;
-  --slate-800: #1E293B;
-  --slate-900: #1E1B4B;
+  /* White/text opacity scale */
+  --white-100: #f0f0ff;
+  --white-60:  #9999bb;
+  --white-30:  #6b6b8a;
+  --white-10:  #3a3a55;
 
-  /* Status */
-  --green-400: #34D399;
-  --green-500: #10B981;
-  --amber-400: #FBBF24;
-  --red-400:   #F87171;
-  --red-500:   #EF4444;
+  /* Status primitives */
+  --red-400:   #f87171;
+  --green-400: #34d399;
+  --amber-400: #fbbf24;
 
-  /* Legacy aliases for any remaining references */
-  --iris-300: var(--indigo-200);
-  --iris-400: var(--indigo-300);
-  --iris-500: var(--indigo-400);
-  --iris-600: var(--indigo-500);
-  --iris-700: var(--indigo-600);
-  --obsidian-1000: var(--parchment-100);
-  --white-100: var(--slate-900);
-  --white-60:  var(--slate-600);
-  --white-30:  var(--slate-400);
-  --white-10:  var(--slate-300);
-}
+  /* Spacing scale (8px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 14px;
+  --space-4: 20px;
+  --space-5: 28px;
+  --space-6: 40px;
+  --space-7: 52px;
 
-/* ── LAYER 2: SEMANTIC ── */
-:root {
-  /* Backgrounds */
-  --color-bg:             var(--parchment-100);
-  --color-surface:        rgba(255, 255, 255, 0.72);
-  --color-surface-raised: rgba(255, 255, 255, 0.90);
-  --color-surface-overlay:rgba(255, 255, 255, 0.96);
-
-  /* Borders */
-  --color-border:        rgba(99, 102, 241, 0.14);
-  --color-border-accent: rgba(99, 102, 241, 0.28);
-
-  /* Primary / indigo */
-  --color-primary:        var(--indigo-500);
-  --color-primary-hover:  var(--indigo-400);
-  --color-primary-active: var(--indigo-600);
-  --color-primary-dim:    rgba(99, 102, 241, 0.08);
-  --color-primary-border: rgba(99, 102, 241, 0.22);
-
-  /* Text */
-  --color-on-primary:  #ffffff;
-  --color-text:        var(--slate-900);
-  --color-text-muted:  var(--slate-500);
-  --color-text-subtle: var(--slate-500);  /* slate-400 fails WCAG AA (3.2:1); slate-500 = 4.6:1 */
-  --color-text-faint:  var(--slate-400);  /* decorative/placeholder use only — not for readable text */
-
-  /* Status */
-  --color-error:        var(--red-500);
-  --color-error-border: rgba(239, 68, 68, 0.40);
-  --color-error-bg:     rgba(239, 68, 68, 0.06);
-  --color-success:      var(--green-500);
-  --color-warning:      var(--amber-400);
-
-  /* Gradient brand tokens */
-  --gradient-brand: linear-gradient(135deg, #6366F1 0%, #818CF8 60%, #a5b4fc 100%);
-  --gradient-text:  linear-gradient(135deg, #818CF8 0%, #c084fc 55%, #f9a8d4 100%);
-  --glow-primary:       0 0 0 1px rgba(99,102,241,0.3), 0 8px 32px rgba(99,102,241,0.4), 0 0 60px rgba(99,102,241,0.15);
-  --glow-primary-hover: 0 0 0 1px rgba(99,102,241,0.4), 0 8px 40px rgba(99,102,241,0.55), 0 0 80px rgba(99,102,241,0.2);
-
-  /* Glass */
-  --glass-surface:  rgba(255, 255, 255, 0.70);
-  --glass-border:   rgba(255, 255, 255, 0.82);
-  --glass-shadow:   0 8px 32px rgba(99, 102, 241, 0.09), 0 1px 3px rgba(99, 102, 241, 0.05);
-  --glass-blur:     blur(18px);
-  --glass-blur-sm:  blur(10px);
-
-  /* Typography — Plus Jakarta Sans (ui-ux-pro-max: Friendly SaaS #1) */
-  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
-  --font-ui:      'Plus Jakarta Sans', system-ui, sans-serif;
-
-  /* Radii — slightly more rounded for friendliness */
-  --radius-sm:   6px;
-  --radius-md:   10px;
-  --radius-lg:   16px;
-  --radius-xl:   20px;
+  /* Radius scale */
+  --radius-sm:   4px;
+  --radius-md:   7px;
+  --radius-lg:   10px;
+  --radius-xl:   12px;
   --radius-full: 9999px;
 
-  /* Spacing */
-  --space-xs:          4px;
-  --space-sm:          8px;
-  --space-md:          14px;
-  --space-lg:          20px;
-  --space-xl:          28px;
-  --space-2xl:         40px;
-  --space-3xl:         52px;
-  --space-container-x: 32px;
-  --space-card-pad:    20px;
+  /* Transition durations */
+  --duration-fast:   150ms;
+  --duration-normal: 200ms;
 }
 
-/* ── LAYER 3: COMPONENTS ── */
+/* === LAYER 2: SEMANTIC === */
+:root {
+  /* Surfaces */
+  --color-bg:            var(--obsidian-1000);
+  --color-surface:       var(--obsidian-800);
+  --color-surface-raised:var(--obsidian-700);
+  --color-overlay:       var(--obsidian-600);
+
+  /* Borders */
+  --color-border:        var(--obsidian-700);
+  --color-border-accent: var(--obsidian-600);
+
+  /* Primary (iris) */
+  --color-primary:        var(--iris-500);
+  --color-primary-hover:  var(--iris-400);
+  --color-primary-active: var(--iris-600);
+  --color-primary-dim:    rgba(129,140,248,0.10);
+  --color-primary-border: rgba(129,140,248,0.28);
+  --color-on-primary:     var(--obsidian-1000);
+
+  /* Text */
+  --color-text:        var(--white-100);
+  --color-text-muted:  var(--white-30);
+  --color-text-subtle: var(--white-10);
+
+  /* Status */
+  --color-error:        var(--red-400);
+  --color-error-border: rgba(248,113,113,0.50);
+  --color-error-bg:     rgba(248,113,113,0.06);
+  --color-success:      var(--green-400);
+  --color-warning:      var(--amber-400);
+
+  /* Typography */
+  --font-display: 'Syne', sans-serif;
+  --font-ui:      'IBM Plex Mono', monospace;
+
+  /* Spacing */
+  --spacing-container-x: var(--space-5);
+  --spacing-card-pad:    var(--space-3);
+}
+
+/* === LAYER 3: COMPONENTS === */
 :root {
   /* Topbar */
-  --topbar-bg:     rgba(245, 243, 255, 0.88);
-  --topbar-border: rgba(99, 102, 241, 0.12);
+  --topbar-bg:     rgba(6,6,8,0.85);
+  --topbar-border: rgba(255,255,255,0.05);
+
+  /* Nav */
+  --nav-color:        var(--color-text-subtle);
+  --nav-hover-color:  var(--white-60);
+  --nav-active-color: var(--color-primary);
+
+  /* Logo */
+  --logo-color:        var(--white-100);
+  --logo-accent-color: var(--color-primary);
 
   /* Version badge */
-  --badge-bg:     var(--color-primary-dim);
-  --badge-border: var(--color-primary-border);
-  --badge-text:   var(--color-primary);
+  --badge-bg:    var(--color-primary-dim);
+  --badge-color: var(--color-primary);
 
   /* Brief card */
-  --brief-card-bg:           var(--glass-surface);
-  --brief-card-border:       rgba(99, 102, 241, 0.18);
-  --brief-card-border-focus: rgba(99, 102, 241, 0.45);
-  --brief-card-border-error: rgba(239, 68, 68, 0.45);
-
-  /* Client field */
-  --client-field-bg:           rgba(99, 102, 241, 0.04);
-  --client-field-bg-hover:     rgba(99, 102, 241, 0.07);
-  --client-field-border:       rgba(99, 102, 241, 0.14);
-  --client-field-border-hover: rgba(99, 102, 241, 0.26);
-  --client-field-border-focus: var(--indigo-500);
+  --brief-card-bg:           rgba(255,255,255,0.025);
+  --brief-card-border:       rgba(129,140,248,0.15);
+  --brief-card-border-focus: rgba(129,140,248,0.50);
+  --brief-card-border-error: var(--color-error-border);
 
   /* Run button */
-  --btn-bg:          var(--color-primary);
-  --btn-bg-hover:    var(--color-primary-hover);
-  --btn-bg-active:   var(--color-primary-active);
-  --btn-bg-disabled: var(--color-primary-dim);
-  --btn-text:        var(--color-on-primary);
-  --btn-text-disabled: rgba(99, 102, 241, 0.35);
+  --btn-bg:           var(--color-primary);
+  --btn-bg-hover:     var(--color-primary-hover);
+  --btn-bg-active:    var(--color-primary-active);
+  --btn-bg-disabled:  var(--color-primary-dim);
+  --btn-color:        var(--color-on-primary);
+  --btn-color-disabled: rgba(6,6,15,0.40);
+
+  /* Client field */
+  --field-bg:           rgba(255,255,255,0.03);
+  --field-bg-hover:     rgba(255,255,255,0.04);
+  --field-border:       rgba(255,255,255,0.06);
+  --field-border-hover: rgba(255,255,255,0.10);
+  --field-border-focus: rgba(129,140,248,0.40);
 
   /* Estimate strip */
-  --estimate-bg:     var(--glass-surface);
-  --estimate-border: rgba(99, 102, 241, 0.12);
+  --est-bg:     rgba(255,255,255,0.015);
+  --est-border: rgba(255,255,255,0.05);
 
-  /* Agent card */
-  --agent-card-bg:          rgba(255, 255, 255, 0.55);
-  --agent-card-border:      rgba(255, 255, 255, 0.75);
-  --agent-card-bg-active:   rgba(99, 102, 241, 0.10);
-  --agent-card-border-active: rgba(99, 102, 241, 0.32);
-  --agent-card-bg-done:     rgba(99, 102, 241, 0.05);
-  --agent-card-border-done: rgba(99, 102, 241, 0.14);
+  /* Agent cards */
+  --agent-bg:             rgba(255,255,255,0.02);
+  --agent-border:         rgba(255,255,255,0.05);
+  --agent-bg-active:      rgba(129,140,248,0.07);
+  --agent-border-active:  rgba(129,140,248,0.28);
+  --agent-bg-done:        rgba(129,140,248,0.02);
+  --agent-border-done:    rgba(129,140,248,0.08);
+  --agent-color:          var(--color-text-subtle);
+  --agent-color-active:   var(--iris-400);
+  --agent-color-done:     rgba(129,140,248,0.45);
+  --agent-opacity-silenced: 0.35;
 
   /* Progress track */
-  --progress-track-bg:    rgba(99, 102, 241, 0.12);
-  --progress-fill-active: var(--color-primary);
-  --progress-fill-done:   rgba(99, 102, 241, 0.35);
+  --progress-bg:        rgba(255,255,255,0.05);
+  --progress-fill:      var(--color-primary);
+  --progress-fill-done: rgba(129,140,248,0.40);
 
   /* Output box */
-  --output-bg:        rgba(255, 255, 255, 0.60);
-  --output-border:    rgba(99, 102, 241, 0.12);
-  --output-text:      var(--color-text-muted);
-  --output-highlight: var(--indigo-500);
+  --output-bg:    rgba(255,255,255,0.02);
+  --output-border:rgba(255,255,255,0.05);
+  --output-color: var(--color-text-muted);
+  --output-hl:    var(--iris-400);
+
+  /* Config / modal surfaces */
+  --modal-bg:     var(--color-surface);
+  --modal-border: var(--color-border);
+
+  /* Focus ring (applied globally via :focus-visible) */
+  --ring-offset:  2px;
+  --ring-color:   rgba(129,140,248,0.40);
 }
 
-/* ── GLOBAL FOCUS RING ── */
+/* === GLOBAL FOCUS RING === */
 *:focus-visible {
   outline: none;
-  box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px rgba(99, 102, 241, 0.40);
-}
-
-/* ── ANIMATION ── */
-@keyframes progress-pulse {
-  0%, 100% { opacity: 0.5; }
-  50%       { opacity: 1;   }
+  box-shadow: 0 0 0 var(--ring-offset) var(--color-bg),
+              0 0 0 calc(var(--ring-offset) + 2px) var(--ring-color);
 }
