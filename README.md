@@ -4,7 +4,7 @@
 
 **What's merged in this build:**
 - V7: Classifier (brief intelligence layer), skill .md files, RPG levelling system, token gravity
-- Ours: Agent silencing on wrong brief types, design book principles, walking lab world, motion canvas fast path, superpowers systematic debugging in QA
+- Ours: Agent silencing on wrong brief types, design book principles, motion canvas fast path, superpowers systematic debugging in QA
 
 ## Setup
 
@@ -43,9 +43,7 @@ npm run dev
 ├── configs/
 │   └── coca-cola.json      Example client brand config
 ├── public/
-│   ├── index.html          Main frontend (gravity screen + pipeline)
-│   ├── lab.html            Walking agent lab world (iframe)
-│   └── assets/             7 character PNGs + lab background
+│   └── index.html          Main frontend (gravity screen + pipeline)
 ├── data/                   RPG state (auto-created on first run)
 ├── outputs/                Generated experiences (auto-created)
 ├── server.js
@@ -71,17 +69,6 @@ npm run dev
 | DATA_VIZ | copywriter, creative_director | Same |
 | GAME | copywriter weight minimal | Game UI copy is minimal |
 | BRAND / ACTIVATION | none | All agents run at full weight |
-
-## Lab world integration
-
-Screen 2 shows `lab.html` in an iframe. SSE events automatically wire to it:
-```js
-// Fires automatically from pipeline SSE events
-window.CreativeOSLab.activateAgent('strategist');
-window.CreativeOSLab.markDone('strategist');
-window.CreativeOSLab.resetAll();
-window.CreativeOSLab.runDemo(); // cycles all agents
-```
 
 ## Adding new skills
 
