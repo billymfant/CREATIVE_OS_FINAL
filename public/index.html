@@ -205,49 +205,66 @@ body {
 
 /* ── ESTIMATE PANEL ── */
 .estimate-panel {
-  margin: 0;
-  border: 1px solid var(--estimate-border);
-  background: var(--estimate-bg);
-  backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
-  box-shadow: var(--glass-shadow);
+  width: min(580px, 100%); margin-top: 10px;
+  border: 1px solid var(--est-border);
+  background: var(--est-bg);
   border-radius: var(--radius-lg); overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
   max-height: 0; opacity: 0;
-  transition: max-height 0.4s ease, opacity 0.4s ease, margin 0.35s ease;
 }
-.estimate-panel.visible { max-height: 200px; opacity: 1; margin-top: 12px; }
+.estimate-panel.visible { max-height: 160px; opacity: 1; }
 .est-loading {
-  padding: var(--space-md) var(--space-card-pad);
-  font-size: 11px; letter-spacing: 0.16em;
-  color: var(--color-text-muted); text-transform: uppercase;
+  padding: var(--spacing-card-pad);
+  font-size: 9px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--color-text-muted);
   display: flex; align-items: center; gap: 10px;
 }
 .est-spinner {
   width: 10px; height: 10px;
   border: 1.5px solid rgba(129,140,248,0.2);
-  border-top-color: var(--color-primary); border-radius: 50%;
-  animation: spin 0.8s linear infinite; flex-shrink: 0;
+  border-top-color: var(--color-primary);
+  border-radius: 50%; animation: spin 0.8s linear infinite; flex-shrink: 0;
 }
-@keyframes spin { to { transform: rotate(360deg); } }
 .est-grid {
-  display: grid; grid-template-columns: repeat(4, 1fr);
-  border-top: 1px solid rgba(99,102,241,0.08);
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border-top: 1px solid var(--est-border);
 }
-.est-cell { padding: 12px var(--space-md); border-right: 1px solid rgba(99,102,241,0.08); }
+.est-cell {
+  padding: 10px 14px;
+  border-right: 1px solid var(--est-border);
+}
 .est-cell:last-child { border-right: none; }
-.est-cell-label { font-size: 10px; letter-spacing: 0.15em; color: var(--color-text-muted); text-transform: uppercase; margin-bottom: 5px; }
-.est-cell-value { font-size: 16px; font-family: var(--font-display); font-weight: 700; color: var(--color-text); }
-.est-cell-value.green { color: var(--color-success); }
-.est-cell-value.yellow { color: var(--color-primary); }
-.est-cell-value.warn  { color: var(--color-warning); }
-.est-cell-value.acc   { color: var(--color-primary); }
+.est-cell-label {
+  font-size: 7px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--color-text-muted); margin-bottom: 4px;
+}
+.est-cell-value {
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 700; color: var(--color-text);
+}
+.est-cell-value.accent { color: var(--color-primary); }
+.est-cell-value.green  { color: var(--color-success); }
+.est-cell-value.warn   { color: var(--color-warning); }
 .est-bottom {
-  padding: 10px var(--space-md); border-top: 1px solid rgba(99,102,241,0.08);
+  padding: 10px 14px; border-top: 1px solid var(--est-border);
   display: flex; align-items: center; gap: 8px;
 }
-.est-badge { font-size: 10px; letter-spacing: 0.12em; padding: 3px 8px; border-radius: var(--radius-sm); text-transform: uppercase; font-weight: 600; }
-.est-badge.go     { background: rgba(52,211,153,0.12); color: var(--color-success); border: 1px solid rgba(52,211,153,0.25); }
-.est-badge.warn   { background: rgba(251,191,36,0.12);  color: var(--color-warning); border: 1px solid rgba(251,191,36,0.25); }
-.est-badge.simplify { background: rgba(248,113,113,0.12); color: var(--color-error); border: 1px solid rgba(248,113,113,0.25); }
+.est-badge {
+  font-size: 8px; letter-spacing: 1.5px; padding: 3px 8px;
+  border-radius: var(--radius-full); text-transform: uppercase;
+}
+.est-badge.go {
+  background: rgba(52,211,153,0.10); color: var(--color-success);
+  border: 1px solid rgba(52,211,153,0.25);
+}
+.est-badge.warn {
+  background: rgba(251,191,36,0.10); color: var(--color-warning);
+  border: 1px solid rgba(251,191,36,0.25);
+}
+.est-badge.simplify {
+  background: rgba(248,113,113,0.10); color: var(--color-error);
+  border: 1px solid rgba(248,113,113,0.25);
+}
 .est-reason { font-size: 10px; color: var(--color-text-muted); line-height: 1.5; }
 
 
