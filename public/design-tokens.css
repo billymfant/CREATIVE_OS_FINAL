@@ -58,7 +58,7 @@
   /* Surfaces */
   --color-bg:            var(--obsidian-1000);
   --color-surface:       var(--obsidian-800);
-  --color-surface-raised:var(--obsidian-700);
+  --color-surface-raised: var(--obsidian-700);
   --color-overlay:       var(--obsidian-600);
 
   /* Borders */
