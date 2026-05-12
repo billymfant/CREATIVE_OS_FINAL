@@ -100,11 +100,13 @@ body {
 
 /* Centered brief card */
 .brief-card {
+  position: relative;
   width: min(580px, 100%);
   background: var(--brief-card-bg);
   border: 1px solid var(--brief-card-border);
   border-radius: var(--radius-lg); overflow: hidden;
-  transition: border-color var(--duration-fast) ease-in-out;
+  transition: border-color var(--duration-fast) ease-in-out,
+              box-shadow 420ms cubic-bezier(0.16,1,0.3,1);
 }
 .brief-card:focus-within {
   border-color: var(--brief-card-border-focus);
@@ -1753,9 +1755,13 @@ function getStyleContext() {
     const FOV  = 850;
     const TILT = 1.05; // ~60° X-tilt so the hole faces the viewer
 
-    let parts = [], stars = [], throat = [];
+    let parts = [], stars = [], throat = [], shockwaves = [];
     let rotY = 0, tubeFlow = 0;
+    let travelTarget = 0, travel = 0;
+    let typingEnergy = 0, clickEnergy = 0;
+    let lastTouchY = null;
     const cosT = Math.cos(TILT), sinT = Math.sin(TILT);
+    let mouse = {x: -9999, y: -9999};
 
     function resize() {
       W = canvas.width  = window.innerWidth;
@@ -1767,6 +1773,11 @@ function getStyleContext() {
     }
     resize();
     window.addEventListener('resize', () => { resize(); init(); });
+    document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+    document.addEventListener('touchmove', e => {
+      if (e.touches.length) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
+    }, {passive: true});
+    document.addEventListener('touchend', () => { mouse.x = -9999; mouse.y = -9999; });
 
     function project(x, y, z) {
       const s = FOV / (FOV + z);
@@ -1776,17 +1787,45 @@ function getStyleContext() {
     function torusTarget(phi, theta) {
       const ct = Math.cos(theta), st = Math.sin(theta);
       const cp = Math.cos(phi),   sp = Math.sin(phi);
-      let x = (R + r*ct)*cp;
-      let y = r*st;
-      let z = (R + r*ct)*sp;
+      const tubeR = r * (1 + travel * 0.20);
+      let x = (R + tubeR*ct)*cp;
+      let y = tubeR*st;
+      let z = (R + tubeR*ct)*sp;
+
+      // Portal morph: organic torus -> faceted hexagonal aperture.
+      // This keeps the material alive while making scroll feel like structural transformation.
+      const morph = Math.min(1, travel * 1.18 + typingEnergy * 0.22);
+      if (morph > 0.001) {
+        const seg = Math.PI / 3;
+        const local = ((phi + seg / 2) % seg) - seg / 2;
+        const hexBoundary = Math.cos(seg / 2) / Math.max(0.22, Math.cos(local));
+        const hexR = R * hexBoundary * (1 + travel * 0.10);
+        const hx = (hexR + tubeR * ct * 0.16) * cp;
+        const hy = tubeR * st * (0.62 - morph * 0.18);
+        const hz = (hexR + tubeR * ct * 0.16) * sp;
+        x += (hx - x) * morph;
+        y += (hy - y) * morph;
+        z += (hz - z) * morph;
+      }
       // Y-axis rotation
       const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
       const x2 = x*cosY + z*sinY;
       const z2 = -x*sinY + z*cosY;
       // X-axis tilt
       const y3 = y*cosT - z2*sinT;
-      const z3 = y*sinT + z2*cosT;
-      return project(x2, y3, z3);
+      const z3 = y*sinT + z2*cosT - travel * 360;
+      const pr = project(x2, y3, z3);
+      const pull = 1 + travel * 0.34;
+      return {
+        sx: cx + (pr.sx - cx) * pull,
+        sy: cy + (pr.sy - cy) * pull,
+        s:  pr.s + travel * 0.16
+      };
+    }
+
+    function addShockwave(x, y, strength = 1) {
+      shockwaves.push({ x, y, life: 1, strength });
+      clickEnergy = Math.min(1, clickEnergy + 0.42 * strength);
     }
 
     function edgeSpawn() {
@@ -1800,15 +1839,16 @@ function getStyleContext() {
     function init() {
       const N = 200, GOLDEN = Math.PI*(3-Math.sqrt(5));
       parts = Array.from({length: N}, (_, i) => {
-        const sp = edgeSpawn();
         return {
           phi:   (i/N)*Math.PI*2,
           theta: GOLDEN*i*3,
           sz:    Math.random()*1.4+0.5,
-          x: sp.x, y: sp.y,
+          x: cx + (Math.random()-0.5) * W * 1.5,
+          y: cy + (Math.random()-0.5) * H * 1.5,
           vx: 0, vy: 0,
-          delay: Math.random()*2200,
-          t: null
+          delay: 0,
+          t: null,
+          hist: []
         };
       });
       throat = Array.from({length: 60}, () => ({
@@ -1832,7 +1872,18 @@ function getStyleContext() {
     function loop(now) {
       const dt = Math.min((now-lastT)/16.67, 3); lastT = now;
 
-      if (!reduced) { rotY += 0.0042*dt; tubeFlow += 0.020*dt; }
+      travel += (travelTarget - travel) * 0.075;
+      travelTarget *= Math.pow(0.965, dt);
+      typingEnergy *= Math.pow(0.90, dt);
+      clickEnergy *= Math.pow(0.88, dt);
+      shockwaves = shockwaves
+        .map(w => ({ ...w, life: w.life - 0.045 * dt }))
+        .filter(w => w.life > 0);
+
+      if (!reduced) {
+        rotY += (0.0042 + travel * 0.014) * dt;
+        tubeFlow += (0.020 + travel * 0.085) * dt;
+      }
 
       // Precompute torus targets (cached for sort + draw)
       parts.forEach(p => { p.t = torusTarget(p.phi, p.theta + tubeFlow); });
@@ -1840,14 +1891,36 @@ function getStyleContext() {
       // Spring update
       parts.forEach(p => {
         if (p.delay > 0) { p.delay -= 16; return; }
-        p.vx += (p.t.sx - p.x) * 0.038;
-        p.vy += (p.t.sy - p.y) * 0.038;
-        p.vx *= 0.87; p.vy *= 0.87;
+        // Mouse repulsion — radius/force from planet-particles.html for smooth feel
+        const mdx = p.x - mouse.x, mdy = p.y - mouse.y;
+        const md = Math.sqrt(mdx*mdx + mdy*mdy) || 1;
+        if (md < 140) {
+          const f = (140 - md) / 140;
+          p.vx += (mdx/md)*f*4.5; p.vy += (mdy/md)*f*4.5;
+        }
+        // Record history before moving
+        p.hist.push({x: p.x, y: p.y});
+        if (p.hist.length > 7) p.hist.shift();
+        // Spring to torus target — 0.08/0.82 from planet-particles.html (fast snap, gentle oscillation)
+        const spring = 0.08 + travel * 0.016;
+        p.vx += (p.t.sx - p.x) * spring;
+        p.vy += (p.t.sy - p.y) * spring;
+        shockwaves.forEach(w => {
+          const dx = p.x - w.x, dy = p.y - w.y;
+          const d = Math.sqrt(dx*dx + dy*dy) || 1;
+          if (d < 155) {
+            const force = Math.pow(1 - d / 155, 1.8) * w.life * w.strength * 2.1;
+            const tangent = 0.26 * w.life * w.strength;
+            p.vx += (dx / d) * force + (-dy / d) * tangent;
+            p.vy += (dy / d) * force + ( dx / d) * tangent;
+          }
+        });
+        p.vx *= 0.82 - travel * 0.020; p.vy *= 0.82 - travel * 0.020;
         p.x += p.vx; p.y += p.vy;
       });
 
-      // Trail fade — comet streaks, equilibrates to near-black
-      ctx.fillStyle = 'rgba(0,0,8,0.18)';
+      // Solid clear — prevents trail from burning a permanent ring at torus positions
+      ctx.fillStyle = '#000008';
       ctx.fillRect(0, 0, W, H);
 
       // Twinkling stars
@@ -1859,12 +1932,20 @@ function getStyleContext() {
         ctx.fill();
       });
 
-      // Soft atmosphere glow (accumulates to ~0.12 under trail fade)
+      // Atmosphere glow — single-frame alpha (no accumulation now)
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R*2.2);
-      g.addColorStop(0,   'rgba(99,102,241,0.022)');
-      g.addColorStop(0.5, 'rgba(99,102,241,0.008)');
+      const coreGlow = Math.min(0.50, 0.13 + travel * 0.22 + clickEnergy * 0.22);
+      g.addColorStop(0,   `rgba(129,140,248,${coreGlow.toFixed(3)})`);
+      g.addColorStop(0.5, `rgba(99,102,241,${(0.05 + travel * 0.08).toFixed(3)})`);
       g.addColorStop(1,   'rgba(99,102,241,0)');
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+      // Dark void at the wormhole centre
+      const hole = ctx.createRadialGradient(cx, cy, R*0.05, cx, cy, R*(0.25 + travel*0.20));
+      hole.addColorStop(0,    `rgba(0,0,10,${(0.52 + travel*0.28).toFixed(2)})`);
+      hole.addColorStop(0.55, `rgba(0,0,16,${(0.16 + travel*0.18).toFixed(2)})`);
+      hole.addColorStop(1,    'rgba(0,0,16,0)');
+      ctx.fillStyle = hole; ctx.fillRect(0, 0, W, H);
 
       // Painter's algorithm: sort back-to-front by perspective scale
       parts.sort((a, b) => a.t.s - b.t.s);
@@ -1872,11 +1953,37 @@ function getStyleContext() {
       function drawPart(p) {
         const {sx, sy, s} = p.t;
         const depth = Math.max(0, Math.min(1, (s - 0.68) / 0.65));
-        const alpha = 0.13 + depth * 0.62;
+        // Maturity: particle is invisible when far from its torus target, fades in as it arrives
+        const distToTarget = Math.hypot(p.x - sx, p.y - sy);
+        const maturity = Math.max(0, Math.min(1, 1 - distToTarget / 320));
+        const alpha = Math.min(0.95, (0.18 + depth * 0.62 + clickEnergy * 0.10) * maturity);
         const rc = (6   + (129-6  )*depth + 0.5)|0;
         const gc = (182 + (140-182)*depth + 0.5)|0;
         const bc = (212 + (248-212)*depth + 0.5)|0;
-        const sz = p.sz * (0.42 + depth*0.68);
+        const sz = p.sz * (0.42 + depth*0.68) * (1 + Math.abs(p.vx + p.vy) * 0.05) * Math.max(0.08, maturity);
+        // History trail — only renders while particle is actually moving, no ring accumulation
+        const speed = Math.hypot(p.vx, p.vy);
+        if (speed > 0.35 && p.hist.length > 1) {
+          p.hist.forEach((h, i) => {
+            const t = (i + 1) / p.hist.length;
+            ctx.beginPath();
+            ctx.arc(h.x, h.y, Math.max(sz * t * 0.55, 0.15), 0, Math.PI*2);
+            ctx.fillStyle = `rgba(${rc},${gc},${bc},${(alpha * t * 0.32).toFixed(2)})`;
+            ctx.fill();
+          });
+        }
+        // Radial streak during scroll (travel effect)
+        const streak = travel * 28 * depth;
+        if (streak > 1) {
+          const vx = sx - cx, vy = sy - cy, vd = Math.sqrt(vx*vx + vy*vy) || 1;
+          ctx.beginPath();
+          ctx.moveTo(sx - (vx/vd)*streak, sy - (vy/vd)*streak);
+          ctx.lineTo(sx, sy);
+          ctx.strokeStyle = `rgba(${rc},${gc},${bc},${(alpha*0.38).toFixed(2)})`;
+          ctx.lineWidth = Math.max(0.3, sz * 0.55);
+          ctx.stroke();
+        }
+        // Current dot
         ctx.beginPath();
         ctx.arc(sx, sy, Math.max(sz, 0.3), 0, Math.PI*2);
         ctx.fillStyle = `rgba(${rc},${gc},${bc},${alpha.toFixed(2)})`;
@@ -1913,6 +2020,35 @@ function getStyleContext() {
       requestAnimationFrame(loop);
     }
     requestAnimationFrame(loop);
+
+    function activeBriefScreen() {
+      return document.getElementById('s-brief')?.classList.contains('active');
+    }
+    function addTravel(delta) {
+      if (!activeBriefScreen() || reduced) return;
+      travelTarget = Math.max(0, Math.min(1, travelTarget + delta));
+    }
+    window.addEventListener('wheel', e => {
+      addTravel(Math.abs(e.deltaY) / 1300);
+    }, { passive: true });
+    window.addEventListener('touchstart', e => {
+      lastTouchY = e.touches[0]?.clientY ?? null;
+    }, { passive: true });
+    window.addEventListener('touchmove', e => {
+      if (lastTouchY == null) return;
+      const y = e.touches[0]?.clientY ?? lastTouchY;
+      addTravel(Math.abs(lastTouchY - y) / 900);
+      lastTouchY = y;
+    }, { passive: true });
+    document.addEventListener('pointerdown', e => {
+      if (!activeBriefScreen() || reduced) return;
+      addShockwave(e.clientX, e.clientY, e.target.closest('.brief-card') ? 1.15 : 0.85);
+    });
+    document.getElementById('brief-input')?.addEventListener('input', () => {
+      if (!activeBriefScreen() || reduced) return;
+      typingEnergy = Math.min(1, typingEnergy + 0.28);
+      travelTarget = Math.min(1, travelTarget + 0.018);
+    });
   } catch(e) { console.warn('Wormhole error:', e); }
 })();
 
