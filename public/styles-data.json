@@ -1,0 +1,310 @@
+[
+  {
+    "name": "Dark Cinematic",
+    "type": "cinematic",
+    "keywords": ["noir", "dramatic", "high-contrast", "moody", "shadow"],
+    "colors": ["#060608", "#818cf8", "#06b6d4", "#ffffff"],
+    "bestFor": "Luxury products, tech brands, and campaigns that need gravitas and mystery"
+  },
+  {
+    "name": "New Wave Film",
+    "type": "cinematic",
+    "keywords": ["french", "existential", "jump-cut", "raw", "intimate"],
+    "colors": ["#1a1a2e", "#e2c08d", "#c0392b", "#f5f5f0"],
+    "bestFor": "Indie brands, fashion editorials, and culturally-aware campaigns"
+  },
+  {
+    "name": "Documentary Grit",
+    "type": "cinematic",
+    "keywords": ["authentic", "grain", "handheld", "unfiltered", "real"],
+    "colors": ["#2d2d2d", "#b8a99a", "#d4c5b2", "#1c1c1c"],
+    "bestFor": "Social causes, lifestyle brands, and campaigns built on authenticity"
+  },
+  {
+    "name": "Spaghetti Western",
+    "type": "cinematic",
+    "keywords": ["dusty", "epic", "tension", "landscape", "lone-hero"],
+    "colors": ["#8b6914", "#c4793a", "#1a0e00", "#e8d5b0"],
+    "bestFor": "Outdoor brands, spirits, and campaigns about independence and grit"
+  },
+  {
+    "name": "Sci-Fi Ultrawide",
+    "type": "cinematic",
+    "keywords": ["vast", "cosmic", "cold", "technological", "2.39:1"],
+    "colors": ["#000814", "#0a3d62", "#00d4ff", "#e0e0ff"],
+    "bestFor": "Tech launches, EV brands, and future-facing product campaigns"
+  },
+  {
+    "name": "Swiss International",
+    "type": "typography",
+    "keywords": ["grid", "neutral", "functional", "objective", "helvetica"],
+    "colors": ["#ffffff", "#000000", "#ff0000", "#cccccc"],
+    "bestFor": "B2B brands, financial services, and campaigns demanding clarity"
+  },
+  {
+    "name": "Brutalist Editorial",
+    "type": "typography",
+    "keywords": ["raw", "oversized", "collage", "confrontational", "stark"],
+    "colors": ["#000000", "#ffffff", "#ffff00", "#ff3300"],
+    "bestFor": "Fashion disruptors, music brands, and culturally provocative campaigns"
+  },
+  {
+    "name": "Luxury Serif",
+    "type": "typography",
+    "keywords": ["elegant", "refined", "white-space", "restrained", "timeless"],
+    "colors": ["#f7f5f0", "#1a1a1a", "#c9a96e", "#8c8c8c"],
+    "bestFor": "High-end fashion, jewellery, hospitality, and premium lifestyle brands"
+  },
+  {
+    "name": "Neon Grotesk",
+    "type": "typography",
+    "keywords": ["bold", "vibrant", "urban", "punchy", "extended"],
+    "colors": ["#0f0f0f", "#ff006e", "#00ff88", "#ffff00"],
+    "bestFor": "Gen Z brands, streetwear, nightlife, and high-energy product launches"
+  },
+  {
+    "name": "Manifest Condensed",
+    "type": "typography",
+    "keywords": ["protest", "poetic", "stacked", "weight", "declaration"],
+    "colors": ["#fffff0", "#1a1a1a", "#cc0000", "#555555"],
+    "bestFor": "Social campaigns, activist brands, and culturally charged messaging"
+  },
+  {
+    "name": "Quiet Luxury",
+    "type": "luxury",
+    "keywords": ["understated", "tonal", "minimalist", "heritage", "old-money"],
+    "colors": ["#f0ebe3", "#c8bfb2", "#5c5248", "#2a2520"],
+    "bestFor": "Premium fashion, financial wealth brands, and aspirational lifestyle campaigns"
+  },
+  {
+    "name": "Maximalist Couture",
+    "type": "luxury",
+    "keywords": ["ornate", "rich", "excess", "embellished", "opulent"],
+    "colors": ["#1a0a00", "#d4a017", "#8b0000", "#4a0070"],
+    "bestFor": "High fashion houses, event experiences, and brands that celebrate spectacle"
+  },
+  {
+    "name": "Jet Set Archive",
+    "type": "luxury",
+    "keywords": ["travel", "nostalgia", "golden-age", "exclusivity", "patina"],
+    "colors": ["#d4c5a9", "#1c3a5e", "#8b4513", "#f5f0e8"],
+    "bestFor": "Luxury travel, heritage spirits, and brands with genuine provenance"
+  },
+  {
+    "name": "Glitch System",
+    "type": "digital",
+    "keywords": ["error", "fragmented", "digital-decay", "databend", "artifact"],
+    "colors": ["#0a0a0a", "#ff00ff", "#00ffff", "#ff0000"],
+    "bestFor": "Music artists, gaming brands, and campaigns that embrace digital culture"
+  },
+  {
+    "name": "Vaporwave",
+    "type": "digital",
+    "keywords": ["retro-digital", "pastel", "gradient", "nostalgia", "surreal"],
+    "colors": ["#ff71ce", "#01cdfe", "#05ffa1", "#b967ff"],
+    "bestFor": "Music releases, internet-native brands, and nostalgic tech revivals"
+  },
+  {
+    "name": "Terminal Green",
+    "type": "digital",
+    "keywords": ["hacker", "command-line", "phosphor", "lo-fi", "technical"],
+    "colors": ["#0a0f0a", "#00ff41", "#003b00", "#ffffff"],
+    "bestFor": "Cybersecurity, dev tools, and brands speaking to technical audiences"
+  },
+  {
+    "name": "HUD Interface",
+    "type": "digital",
+    "keywords": ["overlay", "data", "military", "precision", "readout"],
+    "colors": ["#000d1a", "#00d4ff", "#0066cc", "#002244"],
+    "bestFor": "Defence, aerospace, fintech, and brands that communicate sophisticated data"
+  },
+  {
+    "name": "Retro-Futurism",
+    "type": "cultural",
+    "keywords": ["optimism", "space-age", "tomorrow", "atomic", "streamline"],
+    "colors": ["#ff6b35", "#f7c59f", "#efefd0", "#004e89"],
+    "bestFor": "Auto brands, consumer tech, and campaigns about a better future"
+  },
+  {
+    "name": "Y2K Revival",
+    "type": "cultural",
+    "keywords": ["chrome", "bubbly", "iridescent", "millennium", "shiny"],
+    "colors": ["#c0c0c0", "#cc99ff", "#99ffff", "#ff99cc"],
+    "bestFor": "Fashion reissues, music acts, and brands targeting millennial nostalgia"
+  },
+  {
+    "name": "70s Psychedelic",
+    "type": "cultural",
+    "keywords": ["groovy", "earthy", "trippy", "warm", "counterculture"],
+    "colors": ["#d4a843", "#8b4513", "#2d5a27", "#cc4400"],
+    "bestFor": "Music festivals, wellness brands, and creative studios with a free spirit"
+  },
+  {
+    "name": "90s Streetwear",
+    "type": "cultural",
+    "keywords": ["raw", "oversized", "skate", "suburban", "irreverent"],
+    "colors": ["#ffffff", "#000000", "#ff6600", "#0000cc"],
+    "bestFor": "Sportswear drops, music merch, and brands targeting culture-fluent youth"
+  },
+  {
+    "name": "Bauhaus Construct",
+    "type": "cultural",
+    "keywords": ["geometric", "primary", "function", "craft", "modernist"],
+    "colors": ["#ffffff", "#000000", "#cc0000", "#0033aa"],
+    "bestFor": "Architecture, furniture, and brands rooted in design-led thinking"
+  },
+  {
+    "name": "Pop Art Blast",
+    "type": "cultural",
+    "keywords": ["halftone", "irony", "bright", "consumer", "bold"],
+    "colors": ["#ffec00", "#ff2079", "#00aaff", "#ff5500"],
+    "bestFor": "FMCG brands, entertainment, and campaigns that treat culture as canvas"
+  },
+  {
+    "name": "Organic Minimal",
+    "type": "organic",
+    "keywords": ["natural", "breathing", "sustainable", "tactile", "quiet"],
+    "colors": ["#f4f0ea", "#d4c9b8", "#8b7355", "#3d3028"],
+    "bestFor": "Wellness, food, and sustainable brands that communicate honest simplicity"
+  },
+  {
+    "name": "Biophilic",
+    "type": "organic",
+    "keywords": ["nature", "living", "botanical", "grounded", "sensory"],
+    "colors": ["#2d4a22", "#7ab648", "#c8e6a0", "#f0ebe0"],
+    "bestFor": "Health, beauty, and lifestyle brands with a deep connection to nature"
+  },
+  {
+    "name": "Japanese Wabi-Sabi",
+    "type": "organic",
+    "keywords": ["imperfect", "transience", "earthy", "aged", "humble"],
+    "colors": ["#e8e0d5", "#a89880", "#5c4a3a", "#2a1f1a"],
+    "bestFor": "Artisan products, premium food, and brands that value depth over shine"
+  },
+  {
+    "name": "Craft & Material",
+    "type": "organic",
+    "keywords": ["handmade", "texture", "honest", "labour", "grain"],
+    "colors": ["#c4a882", "#7a5c3a", "#3d2b1f", "#f0e8d8"],
+    "bestFor": "Food & beverage, artisan goods, and campaigns that celebrate making"
+  },
+  {
+    "name": "Surrealist Dream",
+    "type": "conceptual",
+    "keywords": ["uncanny", "dreamlike", "symbolic", "subconscious", "dislocated"],
+    "colors": ["#f0e6d3", "#3d1a4a", "#c4883a", "#1a3d4a"],
+    "bestFor": "Perfume, art direction, and campaigns that work through feeling not logic"
+  },
+  {
+    "name": "Abstract Expressionism",
+    "type": "conceptual",
+    "keywords": ["gesture", "emotion", "energy", "paint", "spontaneous"],
+    "colors": ["#1a1a1a", "#cc3300", "#0055aa", "#f5c842"],
+    "bestFor": "Arts institutions, luxury fashion, and campaigns that convey raw emotion"
+  },
+  {
+    "name": "Conceptual Minimalism",
+    "type": "conceptual",
+    "keywords": ["idea-first", "stripped-back", "white-space", "pure", "single-thought"],
+    "colors": ["#ffffff", "#000000", "#f0f0f0", "#333333"],
+    "bestFor": "Challenger brands, tech, and campaigns where the idea is the execution"
+  },
+  {
+    "name": "Dada Collage",
+    "type": "conceptual",
+    "keywords": ["anti-logic", "cut-up", "layered", "subversive", "found"],
+    "colors": ["#fffff0", "#000000", "#cc0000", "#888888"],
+    "bestFor": "Music artists, avant-garde fashion, and culturally disruptive brands"
+  },
+  {
+    "name": "Hyperrealism",
+    "type": "conceptual",
+    "keywords": ["ultra-detailed", "photographic", "obsessive", "tactile", "real"],
+    "colors": ["#f5f5f5", "#2a2a2a", "#c8a882", "#4a4a4a"],
+    "bestFor": "Food, automotive, and product campaigns that sell through sensory detail"
+  },
+  {
+    "name": "Afrofuturism",
+    "type": "cultural",
+    "keywords": ["future", "African-diaspora", "sci-fi", "liberation", "vibrant"],
+    "colors": ["#1a0a00", "#d4a017", "#cc0000", "#004400"],
+    "bestFor": "Music, fashion, and brands rooted in Black culture and forward vision"
+  },
+  {
+    "name": "Solarpunk",
+    "type": "cultural",
+    "keywords": ["utopian", "green-tech", "community", "hope", "flourishing"],
+    "colors": ["#2d6e1a", "#f5d020", "#4aa8c0", "#f0ebe0"],
+    "bestFor": "Climate brands, cooperatives, and campaigns imagining a liveable future"
+  },
+  {
+    "name": "Urban Photography",
+    "type": "cinematic",
+    "keywords": ["street", "candid", "contrast", "architectural", "human"],
+    "colors": ["#1a1a1a", "#b0a090", "#ffffff", "#3a3a3a"],
+    "bestFor": "Fashion, sports, and brands that belong to the city"
+  },
+  {
+    "name": "Golden Hour",
+    "type": "cinematic",
+    "keywords": ["warm", "glowing", "romantic", "soft", "optimistic"],
+    "colors": ["#ff8c00", "#ffcc44", "#cc5500", "#fff8e1"],
+    "bestFor": "Lifestyle, travel, and campaigns that radiate warmth and possibility"
+  },
+  {
+    "name": "Monochrome Studio",
+    "type": "luxury",
+    "keywords": ["clean", "controlled", "product-led", "elevated", "graphic"],
+    "colors": ["#f5f5f5", "#000000", "#888888", "#cccccc"],
+    "bestFor": "Premium products, cosmetics, and fashion campaigns that let objects speak"
+  },
+  {
+    "name": "Acid House",
+    "type": "digital",
+    "keywords": ["rave", "smiley", "underground", "repetitive", "euphoric"],
+    "colors": ["#ffff00", "#ff6600", "#000000", "#ff00ff"],
+    "bestFor": "Music, nightlife, and brands that live in subculture"
+  },
+  {
+    "name": "Nordic Calm",
+    "type": "organic",
+    "keywords": ["hygge", "muted", "functional", "winter", "serene"],
+    "colors": ["#e8e4dc", "#b0b8c0", "#5a6a70", "#2a2e30"],
+    "bestFor": "Homeware, wellness, and Scandinavian-inspired lifestyle brands"
+  },
+  {
+    "name": "Latin Vivid",
+    "type": "cultural",
+    "keywords": ["joyful", "saturated", "communal", "festive", "sensory"],
+    "colors": ["#ff4500", "#ffd700", "#00aa44", "#cc00aa"],
+    "bestFor": "Food, beverage, music, and campaigns that celebrate life loudly"
+  },
+  {
+    "name": "Medical Precision",
+    "type": "digital",
+    "keywords": ["clinical", "trustworthy", "data", "clean", "scientific"],
+    "colors": ["#ffffff", "#0066cc", "#00aa88", "#e0e0e0"],
+    "bestFor": "Healthcare, biotech, and campaigns where credibility is paramount"
+  },
+  {
+    "name": "Archival Print",
+    "type": "typography",
+    "keywords": ["editorial", "newspaper", "historic", "stacked", "reportage"],
+    "colors": ["#f5f0e8", "#1a1a1a", "#8b0000", "#c8b89a"],
+    "bestFor": "Journalism, cultural institutions, and brands with heritage narratives"
+  },
+  {
+    "name": "Cyberpunk City",
+    "type": "digital",
+    "keywords": ["neon", "rain", "dystopian", "overcrowded", "electric"],
+    "colors": ["#0a0014", "#ff00aa", "#00aaff", "#ffaa00"],
+    "bestFor": "Gaming, tech, and brands that live at the edge of culture and technology"
+  },
+  {
+    "name": "Desert Minimalism",
+    "type": "organic",
+    "keywords": ["arid", "warm", "expansive", "solitude", "elemental"],
+    "colors": ["#e8d5b0", "#c4874a", "#7a4a20", "#f5f0e5"],
+    "bestFor": "Spirits, wellness retreats, and brands built on space and silence"
+  }
+]

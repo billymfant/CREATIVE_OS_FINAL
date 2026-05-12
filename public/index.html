@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CreativeOS — AI Creative Pipeline</title>
 <meta name="description" content="Enter a brief. Seven specialist AI agents produce your complete creative campaign — strategy, copy, design, motion, and code.">
+<meta name="author" content="Billy Ant (Βασίλης Καραβασίλης)">
+<meta name="creator" content="Billy Ant · Βασίλης Καραβασίλης · CreativeOS 2025 · sig:87f8a1992cfbe6305586192ce472452afb3e57a372326fae67aea96c837a0755">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%236366F1'/><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-family='system-ui' font-weight='800' font-size='18' fill='white'>C</text></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="design-tokens.css">
@@ -22,7 +24,7 @@ body {
 
 #bg-canvas {
   position: fixed; inset: 0; z-index: 0;
-  width: 100vw; height: 100vh;
+  width: 100vw; height: 100dvh;
   pointer-events: none; display: block;
   transition: opacity 0.5s ease;
 }
@@ -75,11 +77,7 @@ body {
 /* ── SCREEN 1: BRIEF ── */
 #s-brief {
   align-items: center; justify-content: center;
-  background: var(--color-bg);
-  background-image: radial-gradient(
-    ellipse 55% 45% at 72% 18%,
-    rgba(129,140,248,0.07) 0%, transparent 65%
-  );
+  background: transparent;
 }
 
 .hero-text {
@@ -766,6 +764,7 @@ body {
       <a class="nav-link active" href="#">Pipeline</a>
       <a class="nav-link" href="/styles-explorer.html">Styles</a>
       <a class="nav-link" href="/preview.html">Preview</a>
+      <a class="nav-link" href="/usage.html">Usage</a>
       <a class="nav-link" href="/landing.html">About</a>
       <span class="badge">Early Access</span>
     </div>
@@ -1741,7 +1740,7 @@ function getStyleContext() {
 }
 
 // ─────────────────────────────────────────────────────────
-// PARTICLE ORB BACKGROUND
+// WORMHOLE PARTICLE BACKGROUND
 // ─────────────────────────────────────────────────────────
 (function () {
   try {
@@ -1750,155 +1749,171 @@ function getStyleContext() {
     if (!ctx) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    let W, H, cx, cy, radius;
-    let mouse = { x: -9999, y: -9999 };
-    let particles = [];
-    let rotation = 0;
-    let exploding = false;
+    let W, H, cx, cy, R, r;
+    const FOV  = 850;
+    const TILT = 1.05; // ~60° X-tilt so the hole faces the viewer
+
+    let parts = [], stars = [], throat = [];
+    let rotY = 0, tubeFlow = 0;
+    const cosT = Math.cos(TILT), sinT = Math.sin(TILT);
 
     function resize() {
       W = canvas.width  = window.innerWidth;
       H = canvas.height = window.innerHeight;
       cx = W / 2;
       cy = H * 0.50;
-      radius = Math.min(W, H) * 0.36;
+      R  = Math.min(W, H) * 0.26;
+      r  = R * 0.42;
     }
     resize();
-    window.addEventListener('resize', () => { resize(); initParticles(); });
+    window.addEventListener('resize', () => { resize(); init(); });
 
-    // Mouse tracking
-    document.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
-    document.addEventListener('touchmove', e => {
-      if (e.touches.length) { mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; }
-    }, { passive: true });
-    document.addEventListener('touchend', () => { mouse.x = -9999; mouse.y = -9999; });
-
-    // Click on hero area triggers explosion
-    document.addEventListener('click', e => {
-      if (!document.getElementById('s-brief').classList.contains('active')) return;
-      if (e.target.closest('button,input,textarea,a,.style-picker-overlay')) return;
-      if (!exploding) { exploding = true; setTimeout(() => { exploding = false; }, 1400); }
-    });
-
-    // Fibonacci sphere point distribution
-    function fibSphere(n) {
-      const pts = [], golden = Math.PI * (3 - Math.sqrt(5));
-      for (let i = 0; i < n; i++) {
-        const y = 1 - (i / (n - 1)) * 2;
-        const r = Math.sqrt(1 - y * y);
-        const t = golden * i;
-        pts.push({ x: Math.cos(t) * r, y, z: Math.sin(t) * r });
-      }
-      return pts;
+    function project(x, y, z) {
+      const s = FOV / (FOV + z);
+      return { sx: cx + x*s, sy: cy + y*s, s };
     }
 
-    function lerpRGB(a, b, t) {
-      return [
-        Math.round(a[0] + (b[0]-a[0])*t),
-        Math.round(a[1] + (b[1]-a[1])*t),
-        Math.round(a[2] + (b[2]-a[2])*t),
-      ];
+    function torusTarget(phi, theta) {
+      const ct = Math.cos(theta), st = Math.sin(theta);
+      const cp = Math.cos(phi),   sp = Math.sin(phi);
+      let x = (R + r*ct)*cp;
+      let y = r*st;
+      let z = (R + r*ct)*sp;
+      // Y-axis rotation
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const x2 = x*cosY + z*sinY;
+      const z2 = -x*sinY + z*cosY;
+      // X-axis tilt
+      const y3 = y*cosT - z2*sinT;
+      const z3 = y*sinT + z2*cosT;
+      return project(x2, y3, z3);
     }
 
-    const C_FRONT = [99, 102, 241];  // indigo-500 — front face
-    const C_MID   = [129, 140, 248]; // indigo-400 — mid
-    const C_BACK  = [196, 181, 253]; // violet-300 — back face
-
-    class Particle {
-      constructor(i, total) {
-        const pts = fibSphere(total);
-        const p = pts[i];
-        this.phi   = Math.acos(p.y);
-        this.theta = Math.atan2(p.z, p.x);
-        this.colorT = i / total;
-        this.baseSize = Math.random() * 1.8 + 0.6;
-        // Scatter start
-        this.x = cx + (Math.random()-0.5) * W * 0.9;
-        this.y = cy + (Math.random()-0.5) * H * 0.9;
-        this.vx = 0; this.vy = 0;
-        this.delay = i * 0.28;
-      }
-
-      getTarget(rot) {
-        const theta = this.theta + rot;
-        const sinPhi = Math.sin(this.phi);
-        const x3 = Math.cos(theta) * sinPhi;
-        const y3 = Math.cos(this.phi);
-        const z3 = Math.sin(theta) * sinPhi;
-        const persp = 1 + z3 * 0.28;
-        return { x: cx + x3 * radius * persp, y: cy + y3 * radius * persp, z: z3 };
-      }
-
-      update(rot) {
-        if (this.delay > 0) { this.delay -= 1; return; }
-        const target = this.getTarget(rot);
-        if (exploding) {
-          this.vx += (Math.random()-0.5) * 5;
-          this.vy += (Math.random()-0.5) * 5;
-          this.vx *= 0.96; this.vy *= 0.96;
-          this.x += this.vx; this.y += this.vy;
-          return;
-        }
-        // Mouse repulsion
-        const dx = this.x - mouse.x, dy = this.y - mouse.y;
-        const dist = Math.sqrt(dx*dx + dy*dy);
-        if (dist < 110 && dist > 0.1) {
-          const f = (110-dist)/110;
-          this.vx += (dx/dist)*f*4; this.vy += (dy/dist)*f*4;
-        }
-        // Spring to target
-        this.vx += (target.x - this.x) * 0.09;
-        this.vy += (target.y - this.y) * 0.09;
-        this.vx *= 0.80; this.vy *= 0.80;
-        this.x += this.vx; this.y += this.vy;
-      }
-
-      draw(rot) {
-        const { z } = this.getTarget(rot);
-        const alpha = Math.max(0.08, 0.12 + (z+1) * 0.40);
-        const cT = (z+1) * 0.5;
-        const c = cT > 0.5 ? lerpRGB(C_MID, C_FRONT, (cT-0.5)*2) : lerpRGB(C_BACK, C_MID, cT*2);
-        const sz = this.baseSize * (0.45 + z * 0.55 + 0.05);
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, Math.max(sz, 0.3), 0, Math.PI*2);
-        ctx.fillStyle = `rgba(${c[0]},${c[1]},${c[2]},${alpha.toFixed(2)})`;
-        ctx.fill();
-      }
+    function edgeSpawn() {
+      const m = 120, s = (Math.random()*4)|0;
+      if (s===0) return {x: Math.random()*W,   y: -m};
+      if (s===1) return {x: Math.random()*W,   y: H+m};
+      if (s===2) return {x: -m,                y: Math.random()*H};
+      return                {x: W+m,           y: Math.random()*H};
     }
 
-    function initParticles() {
-      const N = Math.min(2000, Math.floor(W * H / 440));
-      particles = [];
-      for (let i = 0; i < N; i++) particles.push(new Particle(i, N));
+    function init() {
+      const N = 200, GOLDEN = Math.PI*(3-Math.sqrt(5));
+      parts = Array.from({length: N}, (_, i) => {
+        const sp = edgeSpawn();
+        return {
+          phi:   (i/N)*Math.PI*2,
+          theta: GOLDEN*i*3,
+          sz:    Math.random()*1.4+0.5,
+          x: sp.x, y: sp.y,
+          vx: 0, vy: 0,
+          delay: Math.random()*2200,
+          t: null
+        };
+      });
+      throat = Array.from({length: 60}, () => ({
+        angle: Math.random()*Math.PI*2,
+        dist:  R*(0.5+Math.random()*0.5),
+        speed: 1.5+Math.random()*2.5,
+        sz:    Math.random()*0.9+0.3,
+        aBase: Math.random()*0.20+0.07,
+        life:  Math.random()
+      }));
+      stars = Array.from({length: 200}, () => ({
+        x:  Math.random()*W, y: Math.random()*H,
+        r:  Math.random()*0.7+0.2,
+        ph: Math.random()*Math.PI*2,
+        sp: Math.random()*0.018+0.007
+      }));
     }
-    initParticles();
+    init();
 
-    function draw() {
-      ctx.fillStyle = '#F5F3FF';
-      ctx.fillRect(0, 0, W, H);
+    let lastT = 0;
+    function loop(now) {
+      const dt = Math.min((now-lastT)/16.67, 3); lastT = now;
 
-      // Atmospheric glow behind orb
-      const grd = ctx.createRadialGradient(cx, cy, 0, cx, cy, radius * 1.8);
-      grd.addColorStop(0,   'rgba(129,140,248,0.18)');
-      grd.addColorStop(0.5, 'rgba(165,180,252,0.08)');
-      grd.addColorStop(1,   'rgba(129,140,248,0)');
-      ctx.fillStyle = grd;
-      ctx.beginPath(); ctx.arc(cx, cy, radius*1.8, 0, Math.PI*2); ctx.fill();
+      if (!reduced) { rotY += 0.0042*dt; tubeFlow += 0.020*dt; }
 
-      // Corner atmosphere blobs (static)
-      [[0.08,0.14,'rgba(196,181,253,0.14)'],[0.92,0.86,'rgba(99,102,241,0.10)'],[0.55,0.04,'rgba(165,180,252,0.12)']].forEach(([bx,by,col]) => {
-        const g = ctx.createRadialGradient(bx*W, by*H, 0, bx*W, by*H, Math.min(W,H)*0.38);
-        g.addColorStop(0, col); g.addColorStop(1, 'rgba(99,102,241,0)');
-        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      // Precompute torus targets (cached for sort + draw)
+      parts.forEach(p => { p.t = torusTarget(p.phi, p.theta + tubeFlow); });
+
+      // Spring update
+      parts.forEach(p => {
+        if (p.delay > 0) { p.delay -= 16; return; }
+        p.vx += (p.t.sx - p.x) * 0.038;
+        p.vy += (p.t.sy - p.y) * 0.038;
+        p.vx *= 0.87; p.vy *= 0.87;
+        p.x += p.vx; p.y += p.vy;
       });
 
-      if (!reduced) rotation += 0.003;
-      particles.forEach(p => { p.update(rotation); p.draw(rotation); });
-      requestAnimationFrame(draw);
-    }
+      // Trail fade — comet streaks, equilibrates to near-black
+      ctx.fillStyle = 'rgba(0,0,8,0.18)';
+      ctx.fillRect(0, 0, W, H);
 
-    draw();
-  } catch(e) { console.warn('Particle orb error:', e); }
+      // Twinkling stars
+      const tc = now * 0.001;
+      stars.forEach(s => {
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+        ctx.fillStyle = `rgba(240,240,255,${(0.10+Math.sin(tc*s.sp+s.ph)*0.09).toFixed(2)})`;
+        ctx.fill();
+      });
+
+      // Soft atmosphere glow (accumulates to ~0.12 under trail fade)
+      const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R*2.2);
+      g.addColorStop(0,   'rgba(99,102,241,0.022)');
+      g.addColorStop(0.5, 'rgba(99,102,241,0.008)');
+      g.addColorStop(1,   'rgba(99,102,241,0)');
+      ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+      // Painter's algorithm: sort back-to-front by perspective scale
+      parts.sort((a, b) => a.t.s - b.t.s);
+
+      function drawPart(p) {
+        const {sx, sy, s} = p.t;
+        const depth = Math.max(0, Math.min(1, (s - 0.68) / 0.65));
+        const alpha = 0.13 + depth * 0.62;
+        const rc = (6   + (129-6  )*depth + 0.5)|0;
+        const gc = (182 + (140-182)*depth + 0.5)|0;
+        const bc = (212 + (248-212)*depth + 0.5)|0;
+        const sz = p.sz * (0.42 + depth*0.68);
+        ctx.beginPath();
+        ctx.arc(sx, sy, Math.max(sz, 0.3), 0, Math.PI*2);
+        ctx.fillStyle = `rgba(${rc},${gc},${bc},${alpha.toFixed(2)})`;
+        ctx.fill();
+      }
+
+      const half = parts.length >> 1;
+      // Back half of torus
+      for (let i = 0; i < half; i++) drawPart(parts[i]);
+
+      // Throat: particles spiral inward through the hole (event horizon effect)
+      throat.forEach(p => {
+        p.life += p.speed * 0.006;
+        if (p.life >= 1) {
+          p.angle = Math.random()*Math.PI*2;
+          p.dist  = R*(0.5+Math.random()*0.5);
+          p.speed = 1.5+Math.random()*2.5;
+          p.life  = 0;
+        }
+        const a  = p.angle + p.life * 1.6;
+        const d  = p.dist  * (1 - p.life);
+        const sx = cx + Math.cos(a)*d;
+        const sy = cy + Math.sin(a)*d * 0.50; // flatten Y to match tilted-torus ellipse
+        const al = p.aBase * (1 - p.life*0.85);
+        ctx.beginPath();
+        ctx.arc(sx, sy, Math.max(p.sz*(1-p.life*0.5), 0.2), 0, Math.PI*2);
+        ctx.fillStyle = `rgba(129,140,248,${al.toFixed(2)})`;
+        ctx.fill();
+      });
+
+      // Front half of torus (paints over back + throat)
+      for (let i = half; i < parts.length; i++) drawPart(parts[i]);
+
+      requestAnimationFrame(loop);
+    }
+    requestAnimationFrame(loop);
+  } catch(e) { console.warn('Wormhole error:', e); }
 })();
 
 // ─────────────────────────────────────────────────────────

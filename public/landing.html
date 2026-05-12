@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreativeOS — The AI Creative Pipeline</title>
+<meta name="description" content="One brief. Seven specialist AI agents. Your entire creative campaign — strategy, copy, design, motion, and code — in under 60 seconds for $0.18.">
+<meta name="author" content="Billy Ant (Βασίλης Καραβασίλης)">
+<meta name="creator" content="Billy Ant · Βασίλης Καραβασίλης · CreativeOS 2025 · sig:87f8a1992cfbe6305586192ce472452afb3e57a372326fae67aea96c837a0755">
+<meta property="og:title" content="CreativeOS — The AI Creative Pipeline">
+<meta property="og:description" content="One brief. Seven specialist AI agents. Complete creative output from strategy to final QA.">
+<meta property="og:type" content="website">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%236366F1'/><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-family='system-ui' font-weight='800' font-size='18' fill='white'>C</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-tokens.css">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --cream: #fdfbf7;
+  --ink:   #1e1b4b;
+  --gradient-brand: linear-gradient(135deg, #6366F1 0%, #818CF8 60%, #a5b4fc 100%);
+  --gradient-text:  linear-gradient(135deg, #818CF8 0%, #c084fc 55%, #f9a8d4 100%);
+  --glow-primary:   0 8px 32px rgba(99,102,241,0.45), 0 0 0 1px rgba(99,102,241,0.18), 0 0 60px rgba(99,102,241,0.12);
+  --glow-primary-hover: 0 14px 48px rgba(99,102,241,0.60), 0 0 0 1px rgba(99,102,241,0.28), 0 0 80px rgba(99,102,241,0.18);
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-ui);
+  overflow-x: hidden;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 40px;
+  background: rgba(253,251,247,0.82);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(99,102,241,0.08);
+}
+.logo {
+  font-family: var(--font-display); font-weight: 800; font-size: 18px;
+  letter-spacing: -0.02em; color: var(--ink);
+}
+.logo em { color: var(--indigo-500); font-style: normal; }
+.topbar-launch {
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(30,27,75,0.55); text-decoration: none;
+  padding: 9px 20px; border: 1px solid rgba(99,102,241,0.22);
+  border-radius: var(--radius-full);
+  transition: color 150ms, border-color 150ms, background 150ms;
+}
+.topbar-launch:hover {
+  color: var(--ink); border-color: var(--indigo-500);
+  background: rgba(99,102,241,0.07);
+}
+
+/* ════ SCROLL CONTAINER + HERO ════ */
+.scroll-container {
+  height: 200vh;
+  position: relative;
+}
+
+.hero {
+  position: sticky; top: 0;
+  width: 100%; height: 100vh;
+  overflow: hidden;
+  background: var(--cream);
+  display: flex; align-items: center; justify-content: center;
+}
+
+.hero-bg {
+  position: absolute; inset: 0; z-index: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transform: translateZ(0);
+  will-change: contents;
+  backface-visibility: hidden;
+}
+
+.hero-iris {
+  position: absolute; top: -100px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 600px; border-radius: 50%;
+  background: conic-gradient(
+    from 180deg,
+    rgba(99,102,241,0.13),
+    rgba(168,85,247,0.09),
+    rgba(236,72,153,0.07),
+    rgba(99,102,241,0.13)
+  );
+  filter: blur(70px);
+  pointer-events: none; z-index: 1;
+}
+
+.hero-center-dim {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: radial-gradient(ellipse 65% 55% at center,
+    rgba(0,0,0,0.26) 0%, transparent 65%);
+}
+
+.hero-vignette {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background: radial-gradient(ellipse 70% 60% at center,
+    transparent 30%, var(--cream) 75%);
+}
+
+.hero-bottom-fade {
+  position: absolute; bottom: 0; left: 0; right: 0; z-index: 4;
+  height: 260px; pointer-events: none;
+  background: linear-gradient(to bottom,
+    transparent 0%, rgba(253,251,247,0.70) 55%, var(--cream) 100%);
+}
+
+.hero-content {
+  position: relative; z-index: 10;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center; padding: 0 32px; gap: 0;
+  will-change: transform, opacity;
+}
+
+.hero-kicker {
+  display: inline-block;
+  font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(255,255,255,0.72); font-weight: 600;
+  margin-bottom: 22px; padding: 5px 14px;
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: var(--radius-full);
+  background: rgba(255,255,255,0.09);
+  backdrop-filter: blur(10px);
+}
+
+.hero-headline {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(36px, 6vw, 88px);
+  line-height: 1.04; letter-spacing: -0.04em;
+  color: #fff;
+  text-shadow: 0 2px 40px rgba(0,0,0,0.22);
+  margin-bottom: 24px;
+}
+.hero-headline em {
+  background: var(--gradient-text);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-style: normal;
+}
+
+.hero-sub {
+  font-size: clamp(13px, 1.4vw, 16px); line-height: 1.75;
+  color: rgba(255,255,255,0.62);
+  max-width: 440px; margin-bottom: 36px;
+}
+
+.hero-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 38px;
+  background: var(--gradient-brand); color: #fff;
+  border: none; border-radius: var(--radius-full); cursor: pointer;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.20em; text-transform: uppercase; text-decoration: none;
+  transition: transform 180ms cubic-bezier(0.16,1,0.3,1), box-shadow 180ms;
+  box-shadow: var(--glow-primary);
+}
+.hero-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glow-primary-hover);
+}
+.hero-btn-arrow { transition: transform 200ms cubic-bezier(0.16,1,0.3,1); }
+.hero-btn:hover .hero-btn-arrow { transform: translateX(4px); }
+
+.scroll-hint {
+  position: absolute; bottom: 36px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 10; pointer-events: none;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  transition: opacity 400ms ease;
+}
+.scroll-hint-label {
+  font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+}
+.scroll-hint-line {
+  width: 1px; height: 28px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.40), transparent);
+  animation: pulse-line 1.8s ease-in-out infinite;
+}
+@keyframes pulse-line { 0%,100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+/* ════ MARQUEE STRIP ════ */
+.marquee-strip {
+  background: var(--cream);
+  padding: 18px 0; overflow: hidden;
+  border-top: 1px solid rgba(99,102,241,0.08);
+  border-bottom: 1px solid rgba(99,102,241,0.08);
+  position: relative; z-index: 1;
+}
+.marquee-track {
+  display: flex; align-items: center; gap: 0;
+  width: max-content;
+  animation: marquee-scroll 28s linear infinite;
+}
+.marquee-strip:hover .marquee-track { animation-play-state: paused; }
+@keyframes marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.m-item {
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(30,27,75,0.45); white-space: nowrap; padding: 0 28px;
+}
+.m-dot { color: rgba(99,102,241,0.40); font-size: 14px; line-height: 1; padding: 0 4px; }
+
+/* ════ FEATURES HEADER ════ */
+.features-header {
+  background: var(--cream);
+  padding: 72px 7% 0;
+  display: flex; flex-direction: column; gap: 6px;
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.features-header.revealed { opacity: 1; transform: translateY(0); }
+.features-header-kicker {
+  font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(99,102,241,0.65); font-weight: 600; margin: 0;
+}
+.features-header-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(22px, 3vw, 36px);
+  letter-spacing: -0.03em; color: var(--ink);
+  margin: 0; line-height: 1.1;
+}
+
+/* ════ FEATURES GRID ════ */
+.features {
+  background: var(--cream);
+  padding: 32px 7% 72px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.feature-card {
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(99,102,241,0.10);
+  border-top: 1px solid rgba(255,255,255,0.92);
+  border-radius: 18px;
+  padding: 32px 28px;
+  box-shadow: 0 4px 24px rgba(99,102,241,0.06), 0 1px 0 rgba(255,255,255,0.85) inset;
+  opacity: 0; transform: translateY(32px);
+  transition:
+    opacity   0.65s cubic-bezier(0.16,1,0.3,1),
+    transform 0.65s cubic-bezier(0.16,1,0.3,1),
+    box-shadow 220ms cubic-bezier(0.16,1,0.3,1);
+}
+.feature-card.revealed { opacity: 1; transform: translateY(0); }
+.feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(99,102,241,0.14), 0 2px 8px rgba(99,102,241,0.08), 0 1px 0 rgba(255,255,255,0.85) inset;
+}
+
+.feature-num {
+  font-family: var(--font-display); font-size: 44px; font-weight: 800;
+  letter-spacing: -0.04em; margin-bottom: 12px; line-height: 1;
+  background: var(--gradient-brand);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.feature-title {
+  font-family: var(--font-display); font-weight: 700; font-size: 15px;
+  letter-spacing: -0.02em; color: var(--ink); margin-bottom: 10px;
+}
+.feature-desc {
+  font-size: 13px; line-height: 1.75; color: rgba(30,27,75,0.55);
+}
+
+/* ════ FINAL CTA ════ */
+.cta-section {
+  background: var(--cream);
+  padding: 80px 7% 110px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  border-top: 1px solid rgba(99,102,241,0.08);
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.cta-section.revealed { opacity: 1; transform: translateY(0); }
+
+.cta-headline {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(28px, 4vw, 58px);
+  letter-spacing: -0.03em; line-height: 1.08;
+  color: var(--ink); margin-bottom: 18px;
+}
+.cta-headline em {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; font-style: normal;
+}
+.cta-sub {
+  font-size: 14px; color: rgba(30,27,75,0.48);
+  max-width: 400px; line-height: 1.80; margin-bottom: 36px;
+}
+.cta-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 36px;
+  background: var(--gradient-brand); color: #fff;
+  border: none; border-radius: var(--radius-full); cursor: pointer;
+  font-family: var(--font-ui); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.20em; text-transform: uppercase; text-decoration: none;
+  transition: transform 180ms cubic-bezier(0.16,1,0.3,1), box-shadow 180ms;
+  box-shadow: 0 6px 28px rgba(99,102,241,0.35);
+}
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(99,102,241,0.50);
+}
+.cta-note {
+  margin-top: 14px; font-size: 11px; letter-spacing: 0.08em;
+  color: rgba(30,27,75,0.38);
+}
+
+/* ── Responsive ── */
+@media (max-width: 720px) {
+  .topbar { padding: 14px 20px; }
+  .features { grid-template-columns: 1fr; padding: 28px 6% 48px; }
+  .features-header { padding: 48px 6% 0; }
+  .cta-section { padding: 60px 6% 80px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track { animation: none; }
+  .scroll-hint-line { animation: none; }
+  .hero-content { will-change: auto; }
+  .feature-card, .features-header, .cta-section {
+    opacity: 1 !important; transform: none !important; transition: none !important;
+  }
+  .hero-btn, .cta-btn { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <span class="logo">Creative<em>OS</em></span>
+  <a class="topbar-launch" href="index.html">Launch App →</a>
+</nav>
+
+<!-- ════ SCROLL + HERO ════ -->
+<div class="scroll-container" id="scroll-container">
+<section class="hero" id="hero">
+  <video id="hero-video" class="hero-bg" muted playsinline preload="auto">
+    <source src="SCROLL_ANIMATION.mp4" type="video/mp4">
+  </video>
+
+  <div class="hero-iris"></div>
+  <div class="hero-center-dim"></div>
+  <div class="hero-vignette"></div>
+  <div class="hero-bottom-fade"></div>
+
+  <div class="hero-content" id="hero-content">
+    <span class="hero-kicker">Early Access</span>
+    <h1 class="hero-headline">The creative pipeline<br><em>doesn't exist yet.</em></h1>
+    <p class="hero-sub">One brief. Seven AI agents. Your entire campaign — from strategy to final QA.</p>
+    <a class="hero-btn" href="index.html" aria-label="Launch the CreativeOS Pipeline">
+      Launch the Pipeline
+      <svg class="hero-btn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+
+  <div class="scroll-hint" id="scroll-hint">
+    <span class="scroll-hint-label">Scroll</span>
+    <div class="scroll-hint-line"></div>
+  </div>
+</section>
+</div>
+
+<!-- ════ MARQUEE ════ -->
+<section class="marquee-strip">
+  <div class="marquee-track">
+    <span class="m-item">Strategy</span><span class="m-dot">·</span>
+    <span class="m-item">Copywriting</span><span class="m-dot">·</span>
+    <span class="m-item">Visual Design</span><span class="m-dot">·</span>
+    <span class="m-item">Motion</span><span class="m-dot">·</span>
+    <span class="m-item">Creative Direction</span><span class="m-dot">·</span>
+    <span class="m-item">Development</span><span class="m-dot">·</span>
+    <span class="m-item">QA</span><span class="m-dot">·</span>
+    <span class="m-item">84 Style Directions</span><span class="m-dot">·</span>
+    <span class="m-item">$0.18 / Run</span><span class="m-dot">·</span>
+    <span class="m-item">One Brief</span><span class="m-dot">·</span>
+    <span class="m-item">Strategy</span><span class="m-dot">·</span>
+    <span class="m-item">Copywriting</span><span class="m-dot">·</span>
+    <span class="m-item">Visual Design</span><span class="m-dot">·</span>
+    <span class="m-item">Motion</span><span class="m-dot">·</span>
+    <span class="m-item">Creative Direction</span><span class="m-dot">·</span>
+    <span class="m-item">Development</span><span class="m-dot">·</span>
+    <span class="m-item">QA</span><span class="m-dot">·</span>
+    <span class="m-item">84 Style Directions</span><span class="m-dot">·</span>
+    <span class="m-item">$0.18 / Run</span><span class="m-dot">·</span>
+    <span class="m-item">One Brief</span><span class="m-dot">·</span>
+  </div>
+</section>
+
+<!-- ════ FEATURES ════ -->
+<div class="features-header" id="features-header">
+  <p class="features-header-kicker">What's inside</p>
+  <h2 class="features-header-title">Built for creative production,<br>not just prompting.</h2>
+</div>
+<section class="features">
+  <div class="feature-card" id="fc-0">
+    <div class="feature-num">7</div>
+    <div class="feature-title">Specialist AI agents</div>
+    <p class="feature-desc">Each agent owns a distinct discipline — strategy, copy, design, motion, direction, dev, QA. No generalist hand-waving.</p>
+  </div>
+  <div class="feature-card" id="fc-1">
+    <div class="feature-num">84</div>
+    <div class="feature-title">Style directions</div>
+    <p class="feature-desc">From dark cinematic to editorial glass. Every output is shaped by a curated visual language, not a generic prompt.</p>
+  </div>
+  <div class="feature-card" id="fc-2">
+    <div class="feature-num">$0.18</div>
+    <div class="feature-title">Per full pipeline run</div>
+    <p class="feature-desc">One brief. Seven agents. Complete creative package. Fraction of a freelancer hour.</p>
+  </div>
+</section>
+
+<!-- ════ CTA ════ -->
+<section class="cta-section" id="cta-section">
+  <h2 class="cta-headline">Ready to run<br><em>your first pipeline?</em></h2>
+  <p class="cta-sub">Free to try. Three complete runs on us — no credit card, no setup, just a brief.</p>
+  <a class="cta-btn" href="index.html" aria-label="Start your creative brief">
+    Start your Brief
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+      <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </a>
+  <p class="cta-note">Free plan · 3 runs/month · No card needed</p>
+</section>
+
+<script>
+(function () {
+  const video     = document.getElementById('hero-video');
+  const container = document.getElementById('scroll-container');
+  const hint      = document.getElementById('scroll-hint');
+  const heroContent = document.getElementById('hero-content');
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  video.pause();
+
+  function seekTo(t) {
+    if (typeof video.fastSeek === 'function') video.fastSeek(t);
+    else video.currentTime = t;
+  }
+
+  let ticking = false, isSeeking = false, pending = -1;
+
+  function doSeek(t) {
+    isSeeking = true;
+    seekTo(t);
+    video.addEventListener('seeked', () => {
+      isSeeking = false;
+      if (pending >= 0) { const t2 = pending; pending = -1; doSeek(t2); }
+    }, { once: true });
+  }
+
+  function update() {
+    const maxScroll = container.offsetHeight - window.innerHeight;
+    const p = Math.min(Math.max(window.scrollY / maxScroll, 0), 1);
+
+    if (video.readyState >= 2 && video.duration) {
+      const target = p * video.duration;
+      if (isSeeking) { pending = target; }
+      else           { doSeek(target); }
+    }
+
+    if (p > 0.02) hint.style.opacity = '0';
+    else          hint.style.opacity = '1';
+
+    if (!prefersReduced) {
+      const lift = p * -55;
+      const fade = 1 - Math.min(p * 2.8, 1);
+      heroContent.style.transform = `translateY(${lift}px)`;
+      heroContent.style.opacity   = String(Math.max(fade, 0));
+    }
+
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) { requestAnimationFrame(update); ticking = true; }
+  }, { passive: true });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') window.scrollBy({ top:  320, behavior: 'smooth' });
+    if (e.key === 'ArrowUp'   || e.key === 'PageUp'  ) window.scrollBy({ top: -320, behavior: 'smooth' });
+  });
+
+  if (!prefersReduced) {
+    const revealTargets = [
+      { el: document.getElementById('features-header'), delay: 0   },
+      { el: document.getElementById('fc-0'),            delay: 0   },
+      { el: document.getElementById('fc-1'),            delay: 100 },
+      { el: document.getElementById('fc-2'),            delay: 200 },
+      { el: document.getElementById('cta-section'),     delay: 0   },
+    ];
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const item = revealTargets.find(t => t.el === entry.target);
+        if (!item) return;
+        setTimeout(() => entry.target.classList.add('revealed'), item.delay);
+        observer.unobserve(entry.target);
+      });
+    }, { threshold: 0.12 });
+
+    revealTargets.forEach(({ el }) => { if (el) observer.observe(el); });
+  }
+
+})();
+</script>
+</body>
+</html>

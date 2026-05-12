@@ -1,0 +1,15 @@
+node_modules/
+awesome-codex-skills/
+claude-skills/
+.claude/
+data/
+outputs/
+*.env
+.env
+.env.local
+
+# Media assets — store in cloud, not git
+public/assets/
+*.mp4
+*.mov
+*.webm

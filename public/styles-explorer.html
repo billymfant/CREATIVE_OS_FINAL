@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreativeOS — Styles</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%236366F1'/><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-family='system-ui' font-weight='800' font-size='18' fill='white'>C</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-tokens.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  min-height: 100dvh;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  position: fixed; top:0; left:0; right:0; z-index:100;
+  height: 48px;
+  background: var(--topbar-bg);
+  border-bottom: 1px solid var(--topbar-border);
+  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+  display: flex; align-items: center;
+  padding: 0 var(--space-5);
+  gap: var(--space-5);
+}
+.logo {
+  font-family: var(--font-display);
+  font-size: 16px; font-weight: 800;
+  color: var(--logo-color);
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+.logo em { color: var(--logo-accent-color); font-style: normal; }
+.nav { display:flex; gap: var(--space-4); align-items:center; }
+.nav-link {
+  font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+  color: var(--nav-color); text-decoration: none;
+  transition: color var(--duration-normal);
+}
+.nav-link:hover { color: var(--nav-hover-color); }
+.nav-link.active { color: var(--nav-active-color); }
+.badge {
+  font-size: 9px; font-weight: 500; letter-spacing: 0.06em;
+  background: var(--badge-bg); color: var(--badge-color);
+  padding: 3px 7px; border-radius: var(--radius-full);
+}
+
+/* ── LAYOUT ── */
+.page {
+  padding-top: 72px;
+  padding-bottom: var(--space-7);
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-left: var(--space-5);
+  padding-right: var(--space-5);
+}
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex; align-items: center; gap: var(--space-3);
+  margin-bottom: var(--space-4);
+  flex-wrap: wrap;
+}
+.page-title {
+  font-family: var(--font-display);
+  font-size: 28px; font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--color-text);
+  flex: 0 0 auto;
+}
+.search-wrap {
+  position: relative; flex: 1; min-width: 180px; max-width: 320px;
+}
+.search-wrap svg {
+  position:absolute; left:10px; top:50%; transform:translateY(-50%);
+  width:12px; height:12px; color: var(--color-text-muted);
+  pointer-events:none;
+}
+.search-input {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-family: var(--font-ui);
+  font-size: 12px;
+  padding: 8px 12px 8px 30px;
+  outline: none;
+  transition: border-color var(--duration-fast);
+}
+.search-input::placeholder { color: var(--color-text-muted); }
+.search-input:focus { border-color: var(--color-primary-border); }
+
+.count { font-size: 11px; color: var(--color-text-muted); }
+
+/* ── FILTER PILLS ── */
+.filter-bar {
+  display: flex; gap: var(--space-2); flex-wrap: wrap;
+  margin-bottom: var(--space-5);
+}
+.filter-btn {
+  font-family: var(--font-ui);
+  font-size: 10px; font-weight: 500; letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all var(--duration-fast);
+  text-transform: capitalize;
+}
+.filter-btn:hover { color: var(--color-text); border-color: rgba(255,255,255,0.12); }
+.filter-btn.active {
+  color: var(--color-primary);
+  background: var(--color-primary-dim);
+  border-color: var(--color-primary-border);
+}
+
+/* ── GRID ── */
+.style-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.style-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: border-color var(--duration-normal), transform var(--duration-normal);
+  cursor: default;
+}
+.style-card:hover {
+  border-color: rgba(129,140,248,0.22);
+  transform: translateY(-2px);
+}
+
+.card-palette {
+  height: 64px;
+  display: flex;
+}
+.palette-swatch {
+  flex: 1;
+}
+
+.card-body {
+  padding: var(--space-3);
+  display: flex; flex-direction: column; gap: var(--space-2);
+}
+.card-name {
+  font-family: var(--font-display);
+  font-size: 15px; font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+.card-type {
+  font-size: 9px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-primary);
+}
+.card-best {
+  font-size: 11px; line-height: 1.5;
+  color: var(--color-text-muted);
+}
+.card-keywords {
+  display: flex; flex-wrap: wrap; gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+.kw {
+  font-size: 9px; letter-spacing: 0.03em;
+  color: var(--color-text-muted);
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: var(--radius-full);
+  padding: 2px 7px;
+}
+
+/* ── EMPTY ── */
+.empty {
+  text-align: center;
+  padding: 60px var(--space-5);
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+/* ── LOADING ── */
+.loader {
+  display: flex; align-items: center; gap: var(--space-3);
+  padding: var(--space-5) 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+.loader-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--color-primary);
+  animation: pulse-dot 1.2s ease-in-out infinite;
+}
+.loader-dot:nth-child(2) { animation-delay: 0.2s; }
+.loader-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes pulse-dot {
+  0%,100% { opacity:0.2; transform:scale(0.8); }
+  50%      { opacity:1;   transform:scale(1); }
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <span class="logo">Creative<em>OS</em></span>
+  <div class="nav">
+    <a class="nav-link" href="/">Pipeline</a>
+    <a class="nav-link active" href="/styles-explorer.html">Styles</a>
+    <a class="nav-link" href="/preview.html">Preview</a>
+    <a class="nav-link" href="/usage.html">Usage</a>
+    <a class="nav-link" href="/landing.html">About</a>
+    <span class="badge">Early Access</span>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="toolbar">
+    <h1 class="page-title">Style Library</h1>
+    <div class="search-wrap">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/>
+      </svg>
+      <input class="search-input" id="search" type="search" placeholder="Search styles…" autocomplete="off">
+    </div>
+    <span class="count" id="count"></span>
+  </div>
+
+  <div class="filter-bar" id="filter-bar"></div>
+
+  <div id="grid-wrap">
+    <div class="loader">
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      <div class="loader-dot"></div>
+      Loading styles&hellip;
+    </div>
+  </div>
+</main>
+
+<script>
+let allStyles = [], filtered = [], activeFilter = 'all';
+
+async function init() {
+  try {
+    const res = await fetch('/styles-data.json');
+    allStyles = await res.json();
+    buildFilters();
+    render();
+  } catch(e) {
+    document.getElementById('grid-wrap').innerHTML =
+      '<div class="empty">Could not load styles-data.json.</div>';
+  }
+}
+
+function buildFilters() {
+  const types = ['all', ...[...new Set(allStyles.map(s => s.type).filter(Boolean))].sort()];
+  document.getElementById('filter-bar').innerHTML = types.map(t =>
+    `<button class="filter-btn${t==='all'?' active':''}" data-type="${t}">${t === 'all' ? 'All' : t}</button>`
+  ).join('');
+  document.getElementById('filter-bar').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    activeFilter = btn.dataset.type;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.toggle('active', b.dataset.type === activeFilter));
+    render();
+  });
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  filtered = allStyles.filter(s => {
+    const matchType = activeFilter === 'all' || s.type === activeFilter;
+    const matchQ = !q ||
+      s.name.toLowerCase().includes(q) ||
+      (s.keywords || []).join(' ').toLowerCase().includes(q) ||
+      (s.bestFor || '').toLowerCase().includes(q);
+    return matchType && matchQ;
+  });
+  document.getElementById('count').textContent = filtered.length + ' style' + (filtered.length !== 1 ? 's' : '');
+  const wrap = document.getElementById('grid-wrap');
+  if (!filtered.length) {
+    wrap.innerHTML = '<div class="empty">No styles match.</div>';
+    return;
+  }
+  wrap.innerHTML = `<div class="style-grid">${
+    filtered.map(s => {
+      const swatches = (s.colors || []).map(c =>
+        `<div class="palette-swatch" style="background:${c}"></div>`
+      ).join('');
+      const kws = (s.keywords || []).map(k =>
+        `<span class="kw">${k}</span>`
+      ).join('');
+      return `<div class="style-card">
+        <div class="card-palette">${swatches}</div>
+        <div class="card-body">
+          <div class="card-type">${s.type || ''}</div>
+          <div class="card-name">${s.name}</div>
+          <div class="card-best">${s.bestFor || ''}</div>
+          <div class="card-keywords">${kws}</div>
+        </div>
+      </div>`;
+    }).join('')
+  }</div>`;
+}
+
+document.getElementById('search').addEventListener('input', render);
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CreativeOS — Usage</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-tokens.css">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background: var(--color-bg); color: var(--color-text);
+  font-family: var(--font-ui); min-height: 100vh;
+}
+
+.topbar {
+  position: fixed; top:0; left:0; right:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between;
+  padding: 14px 40px;
+  background: var(--topbar-bg);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--topbar-border);
+}
+.logo { font-family: var(--font-display); font-weight:800; font-size:16px; letter-spacing:-0.04em; color:var(--logo-color); text-decoration:none; }
+.logo em { color:var(--logo-accent-color); font-style:normal; }
+.back-link {
+  font-size:11px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--color-text-subtle); text-decoration:none;
+  transition:color var(--duration-fast);
+}
+.back-link:hover { color:var(--color-text); }
+
+.page { padding: 100px 40px 60px; max-width: 860px; margin: 0 auto; }
+
+.page-kicker {
+  font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--color-primary); margin-bottom:10px;
+}
+.page-title {
+  font-family:var(--font-display); font-weight:800;
+  font-size:clamp(24px, 3.5vw, 40px); letter-spacing:-0.04em;
+  color:var(--color-text); margin-bottom:40px;
+}
+
+/* ── STAT CARDS ── */
+.stats-row {
+  display:grid; grid-template-columns: repeat(3,1fr); gap:16px; margin-bottom:40px;
+}
+.stat-card {
+  background: rgba(255,255,255,0.025);
+  border: 1px solid var(--color-border);
+  border-radius:var(--radius-xl); padding:24px;
+}
+.stat-period {
+  font-size:9px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--color-text-muted); margin-bottom:16px;
+}
+.stat-cost {
+  font-family:var(--font-display); font-weight:800;
+  font-size:clamp(28px, 4vw, 40px); letter-spacing:-0.05em;
+  color:var(--color-text); margin-bottom:4px; line-height:1;
+}
+.stat-cost .currency { font-size:0.55em; color:var(--color-primary); vertical-align:super; }
+.stat-tokens {
+  font-size:11px; color:var(--color-text-subtle); margin-top:12px;
+  display:flex; flex-direction:column; gap:4px;
+}
+.stat-tokens span { display:flex; justify-content:space-between; }
+.stat-tokens .val { color:var(--color-text-muted); }
+.stat-calls {
+  margin-top:14px; padding-top:14px;
+  border-top:1px solid var(--color-border);
+  font-size:11px; color:var(--color-text-muted);
+  display:flex; justify-content:space-between;
+}
+.stat-calls strong { color:var(--color-primary); }
+
+/* ── RECENT TABLE ── */
+.section-lbl {
+  font-size:10px; letter-spacing:2.5px; text-transform:uppercase;
+  color:var(--color-text-muted); margin-bottom:14px;
+}
+.table-wrap {
+  border:1px solid var(--color-border);
+  border-radius:var(--radius-lg); overflow:hidden;
+}
+.table-hdr, .table-row {
+  display:grid;
+  grid-template-columns: 1fr 140px 80px 80px 90px;
+  padding: 10px 16px;
+}
+.table-hdr {
+  background: rgba(129,140,248,0.04);
+  border-bottom:1px solid var(--color-border);
+}
+.table-hdr span {
+  font-size:9px; letter-spacing:2px; text-transform:uppercase;
+  color:var(--color-text-muted);
+}
+.table-hdr span:not(:first-child) { text-align:right; }
+.table-row { border-bottom:1px solid rgba(255,255,255,0.03); transition:background var(--duration-fast); }
+.table-row:last-child { border-bottom:none; }
+.table-row:hover { background:rgba(129,140,248,0.03); }
+.tr-ts { font-size:10px; color:var(--color-text-subtle); }
+.tr-model { font-size:10px; color:var(--color-text-muted); text-align:right; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tr-num { font-size:11px; color:var(--color-text-muted); text-align:right; font-variant-numeric:tabular-nums; }
+.tr-cost { font-size:11px; color:var(--color-primary); text-align:right; font-variant-numeric:tabular-nums; font-weight:600; }
+.empty { padding:40px; text-align:center; font-size:11px; color:var(--color-text-subtle); letter-spacing:1px; }
+
+@media (max-width:720px) {
+  .topbar { padding:14px 20px; }
+  .page { padding:90px 20px 48px; }
+  .stats-row { grid-template-columns:1fr; }
+  .table-hdr, .table-row { grid-template-columns:1fr 70px 80px; }
+  .tr-model, .table-hdr span:nth-child(2) { display:none; }
+  .table-hdr span:nth-child(3) { display:none; }
+  .tr-num:first-of-type { display:none; }
+}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <a class="logo" href="/landing.html">Creative<em>OS</em></a>
+  <a class="back-link" href="/index.html">← Back to App</a>
+</nav>
+
+<main class="page">
+  <p class="page-kicker">Claude API</p>
+  <h1 class="page-title">Usage Dashboard</h1>
+
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card"><div class="stat-period">Loading…</div></div>
+  </div>
+
+  <p class="section-lbl">Recent API calls</p>
+  <div class="table-wrap">
+    <div class="table-hdr">
+      <span>Time</span>
+      <span>Model</span>
+      <span>Input</span>
+      <span>Output</span>
+      <span>Cost</span>
+    </div>
+    <div id="table-body"><div class="empty">Loading…</div></div>
+  </div>
+</main>
+
+<script>
+(async function () {
+  const fmt = n => n.toLocaleString();
+  const fmtCost = n => n < 0.01 ? n.toFixed(4) : n.toFixed(2);
+  const fmtTs = iso => {
+    const d = new Date(iso);
+    return d.toLocaleDateString('en-GB', { day:'2-digit', month:'short' })
+      + ' ' + d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+  };
+  const shortModel = m => m.replace('claude-', '').replace('-20250514', '');
+
+  let data;
+  try {
+    const res = await fetch('/usage');
+    data = await res.json();
+  } catch {
+    document.getElementById('stats-row').innerHTML = '<div class="stat-card"><div class="stat-period">Error loading usage data.</div></div>';
+    return;
+  }
+
+  const periods = [
+    { key: 'today',    label: 'Today' },
+    { key: 'month',    label: 'This Month' },
+    { key: 'all_time', label: 'All Time' },
+  ];
+
+  document.getElementById('stats-row').innerHTML = periods.map(({ key, label }) => {
+    const s = data[key];
+    return `
+    <div class="stat-card">
+      <div class="stat-period">${label}</div>
+      <div class="stat-cost"><span class="currency">$</span>${fmtCost(s.cost_usd)}</div>
+      <div class="stat-tokens">
+        <span>Input tokens <span class="val">${fmt(s.input_tokens)}</span></span>
+        <span>Output tokens <span class="val">${fmt(s.output_tokens)}</span></span>
+      </div>
+      <div class="stat-calls">API calls <strong>${fmt(s.calls)}</strong></div>
+    </div>`;
+  }).join('');
+
+  const tbody = document.getElementById('table-body');
+  if (!data.recent || data.recent.length === 0) {
+    tbody.innerHTML = '<div class="empty">No API calls recorded yet. Run the pipeline to start tracking.</div>';
+    return;
+  }
+
+  tbody.innerHTML = data.recent.map(r => `
+    <div class="table-row">
+      <span class="tr-ts">${fmtTs(r.ts)}</span>
+      <span class="tr-model">${shortModel(r.model)}</span>
+      <span class="tr-num">${fmt(r.input_tokens)}</span>
+      <span class="tr-num">${fmt(r.output_tokens)}</span>
+      <span class="tr-cost">$${fmtCost(r.cost_usd)}</span>
+    </div>`).join('');
+})();
+</script>
+</body>
+</html>

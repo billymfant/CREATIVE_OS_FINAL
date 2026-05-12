@@ -6,6 +6,8 @@ import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import { getUsageStats } from './agents/usage-tracker.js';
+import { getCreator } from './creator.js';
 import { runClassifier, calculateTokenGravity } from './agents/classifier.js';
 import { runEstimator }         from './agents/estimator.js';
 import { runStrategist }        from './agents/strategist.js';
@@ -265,5 +267,24 @@ app.get('/jobs', async (req, res) => {
   } catch { res.json([]); }
 });
 
+// ─────────────────────────────────────────────────────────
+// GET /usage — Claude API usage stats (daily + monthly)
+// ─────────────────────────────────────────────────────────
+app.get('/usage', async (req, res) => {
+  try { res.json(await getUsageStats()); }
+  catch (err) { res.status(500).json({ error: err.message }); }
+});
+
+// ─────────────────────────────────────────────────────────
+// GET /about — system info + creator attribution
+// ─────────────────────────────────────────────────────────
+app.get('/about', (req, res) => {
+  res.json(getCreator());
+});
+
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`CreativeOS running → http://localhost:${PORT}`));
+app.listen(PORT, () => {
+  const c = getCreator();
+  console.log(`CreativeOS running → http://localhost:${PORT}`);
+  console.log(`Built by ${c.name} (${c.fullName}) · ${c.year}`);
+});

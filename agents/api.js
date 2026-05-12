@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { trackUsage } from './usage-tracker.js';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -26,6 +27,8 @@ export async function callAgent({ system, user, maxTokens = 1200 }) {
     throw new Error(`Agent hit token limit (${maxTokens}).`);
   }
 
+  trackUsage({ model: msg.model, input_tokens: msg.usage.input_tokens, output_tokens: msg.usage.output_tokens }).catch(() => {});
+
   const raw = msg.content.find(b => b.type === 'text')?.text || '';
   const cleaned = raw.replace(/```json|```/g, '').trim();
   const match = cleaned.match(/\{[\s\S]*\}/);
@@ -49,6 +52,8 @@ export async function callAgentRaw({ system, user, maxTokens = 10000 }) {
   if (msg.stop_reason === 'max_tokens') {
     throw new Error(`Developer/QA agent hit token limit — output was truncated. Try a more focused brief or click Proceed to extend the budget.`);
   }
+
+  trackUsage({ model: msg.model, input_tokens: msg.usage.input_tokens, output_tokens: msg.usage.output_tokens }).catch(() => {});
 
   const raw = msg.content.find(b => b.type === 'text')?.text || '';
   const html = raw.replace(/```html|```/g, '').trim();
