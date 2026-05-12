@@ -1,7 +1,8 @@
 node_modules/
 awesome-codex-skills/
 claude-skills/
-.claude/
+.claude/settings.local.json
+.claude/settings.json
 data/
 outputs/
 *.env
