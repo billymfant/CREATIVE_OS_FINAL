@@ -56,7 +56,13 @@ export async function callAgentRaw({ system, user, maxTokens = 10000 }) {
   trackUsage({ model: msg.model, input_tokens: msg.usage.input_tokens, output_tokens: msg.usage.output_tokens }).catch(() => {});
 
   const raw = msg.content.find(b => b.type === 'text')?.text || '';
-  const html = raw.replace(/```html|```/g, '').trim();
+  const stripped = raw.replace(/```html|```/g, '');
+
+  // Safety extraction: if the model prefixed analysis text before the HTML, strip it
+  const doctypeIdx = stripped.indexOf('<!DOCTYPE html>') !== -1
+    ? stripped.indexOf('<!DOCTYPE html>')
+    : stripped.indexOf('<!doctype html>');
+  const html = doctypeIdx > 0 ? stripped.slice(doctypeIdx).trim() : stripped.trim();
 
   if (html.length < 200) {
     throw new Error(`Agent returned too little output (${html.length} chars). Stop: ${msg.stop_reason}`);
