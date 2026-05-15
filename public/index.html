@@ -466,7 +466,7 @@ body {
 .ai-rec-name { font-size:11px; color:var(--color-text); min-width:108px; }
 .ai-rec-name.silent-name { color:var(--color-text-muted); }
 .gravity-bar-wrap { flex:1; display:flex; align-items:center; gap:8px; }
-.gravity-bar-track { flex:1; height:3px; background:var(--progress-track-bg); border-radius:2px; overflow:hidden; }
+.gravity-bar-track { flex:1; height:3px; background:var(--progress-bg); border-radius:2px; overflow:hidden; }
 .gravity-bar-fill  { height:100%; border-radius:2px; transition:width 0.5s ease; }
 .gravity-label {
   font-size:10px; letter-spacing:1px; text-transform:uppercase; min-width:72px; text-align:right;
@@ -891,7 +891,7 @@ body {
             </div>
             <div class="est-cell">
               <div class="est-cell-label">Est. Time</div>
-              <div class="est-cell-value yellow" id="est-time">—</div>
+              <div class="est-cell-value warn" id="est-time">—</div>
             </div>
             <div class="est-cell">
               <div class="est-cell-label">Tokens</div>
