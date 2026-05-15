@@ -2,6 +2,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { trackUsage } from './usage-tracker.js';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+const MODEL = 'claude-sonnet-4-20250514';
 
 async function withRetry(fn, retries = 2, delay = 1000) {
   try {
@@ -17,7 +18,7 @@ async function withRetry(fn, retries = 2, delay = 1000) {
 
 export async function callAgent({ system, user, maxTokens = 1200 }) {
   const msg = await withRetry(() => client.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: MODEL,
     max_tokens: maxTokens,
     system,
     messages: [{ role: 'user', content: user }]
@@ -43,7 +44,7 @@ export async function callAgent({ system, user, maxTokens = 1200 }) {
 
 export async function callAgentRaw({ system, user, maxTokens = 10000 }) {
   const msg = await withRetry(() => client.messages.create({
-    model: 'claude-sonnet-4-20250514',
+    model: MODEL,
     max_tokens: maxTokens,
     system,
     messages: [{ role: 'user', content: user }]
