@@ -1837,6 +1837,7 @@ function getStyleContext() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isLight = () => document.documentElement.getAttribute('data-theme') === 'light';
 
     let W, H, cx, cy, R, r;
     const FOV  = 850;
@@ -2007,7 +2008,7 @@ function getStyleContext() {
       });
 
       // Solid clear — prevents trail from burning a permanent ring at torus positions
-      ctx.fillStyle = '#000008';
+      ctx.fillStyle = isLight() ? '#f5f4f0' : '#000008';
       ctx.fillRect(0, 0, W, H);
 
       // Twinkling stars
@@ -2015,23 +2016,29 @@ function getStyleContext() {
       stars.forEach(s => {
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-        ctx.fillStyle = `rgba(240,240,255,${(0.10+Math.sin(tc*s.sp+s.ph)*0.09).toFixed(2)})`;
+        const sa = (0.10 + Math.sin(tc*s.sp+s.ph)*0.09).toFixed(2);
+        ctx.fillStyle = isLight()
+          ? `rgba(99,102,241,${sa})`
+          : `rgba(240,240,255,${sa})`;
         ctx.fill();
       });
 
       // Atmosphere glow — single-frame alpha (no accumulation now)
       const g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R*2.2);
-      const coreGlow = Math.min(0.50, 0.13 + travel * 0.22 + clickEnergy * 0.22);
+      const coreGlow = Math.min(isLight() ? 0.18 : 0.50, (isLight() ? 0.06 : 0.13) + travel * 0.22 + clickEnergy * 0.22);
       g.addColorStop(0,   `rgba(129,140,248,${coreGlow.toFixed(3)})`);
       g.addColorStop(0.5, `rgba(99,102,241,${(0.05 + travel * 0.08).toFixed(3)})`);
       g.addColorStop(1,   'rgba(99,102,241,0)');
       ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
 
-      // Dark void at the wormhole centre
+      // Void at the wormhole centre — dark on dark, deep shadow on light
+      const holeAlpha0    = isLight() ? (0.12 + travel*0.10).toFixed(2) : (0.52 + travel*0.28).toFixed(2);
+      const holeAlpha055  = isLight() ? (0.04 + travel*0.06).toFixed(2) : (0.16 + travel*0.18).toFixed(2);
+      const holeColor     = isLight() ? '30,32,53' : '0,0,10';
       const hole = ctx.createRadialGradient(cx, cy, R*0.05, cx, cy, R*(0.25 + travel*0.20));
-      hole.addColorStop(0,    `rgba(0,0,10,${(0.52 + travel*0.28).toFixed(2)})`);
-      hole.addColorStop(0.55, `rgba(0,0,16,${(0.16 + travel*0.18).toFixed(2)})`);
-      hole.addColorStop(1,    'rgba(0,0,16,0)');
+      hole.addColorStop(0,    `rgba(${holeColor},${holeAlpha0})`);
+      hole.addColorStop(0.55, `rgba(${holeColor},${holeAlpha055})`);
+      hole.addColorStop(1,    `rgba(${holeColor},0)`);
       ctx.fillStyle = hole; ctx.fillRect(0, 0, W, H);
 
       // Painter's algorithm: sort back-to-front by perspective scale
@@ -2043,10 +2050,12 @@ function getStyleContext() {
         // Maturity: particle is invisible when far from its torus target, fades in as it arrives
         const distToTarget = Math.hypot(p.x - sx, p.y - sy);
         const maturity = Math.max(0, Math.min(1, 1 - distToTarget / 320));
-        const alpha = Math.min(0.95, (0.18 + depth * 0.62 + clickEnergy * 0.10) * maturity);
-        const rc = (6   + (129-6  )*depth + 0.5)|0;
-        const gc = (182 + (140-182)*depth + 0.5)|0;
-        const bc = (212 + (248-212)*depth + 0.5)|0;
+        const light = isLight();
+        const alpha = Math.min(0.95, ((light ? 0.28 : 0.18) + depth * 0.62 + clickEnergy * 0.10) * maturity);
+        // Dark: teal→iris  |  Light: deep-indigo→iris (teal washes out on off-white)
+        const rc = light ? (63  + (99 -63 )*depth + 0.5)|0 : (6   + (129-6  )*depth + 0.5)|0;
+        const gc = light ? (51  + (102-51 )*depth + 0.5)|0 : (182 + (140-182)*depth + 0.5)|0;
+        const bc = light ? (189 + (241-189)*depth + 0.5)|0 : (212 + (248-212)*depth + 0.5)|0;
         const sz = p.sz * (0.42 + depth*0.68) * (1 + Math.abs(p.vx + p.vy) * 0.05) * Math.max(0.08, maturity);
         // History trail — only renders while particle is actually moving, no ring accumulation
         const speed = Math.hypot(p.vx, p.vy);
@@ -2097,7 +2106,7 @@ function getStyleContext() {
         const al = p.aBase * (1 - p.life*0.85);
         ctx.beginPath();
         ctx.arc(sx, sy, Math.max(p.sz*(1-p.life*0.5), 0.2), 0, Math.PI*2);
-        ctx.fillStyle = `rgba(129,140,248,${al.toFixed(2)})`;
+        ctx.fillStyle = isLight() ? `rgba(79,70,229,${al.toFixed(2)})` : `rgba(129,140,248,${al.toFixed(2)})`;
         ctx.fill();
       });
 
